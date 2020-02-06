@@ -1,6 +1,7 @@
 public class GenericQueue<T> extends GenericList<T> {
 
     public GenericQueue(T value) {
+        super();
         add(value);
     }
 

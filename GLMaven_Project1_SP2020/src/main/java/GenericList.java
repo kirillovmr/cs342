@@ -1,11 +1,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
-// Iterator interface
-interface CreateIterator {
-    abstract Iterator createIterator();
-}
-
 public abstract class GenericList<T> implements CreateIterator {
 
     // Encapsulated Node class
@@ -19,11 +14,16 @@ public abstract class GenericList<T> implements CreateIterator {
         }
     }
 
-    // Encapsulated Iterator class
+    // Encapsulated GLIterator class
     public class GLIterator<T> implements Iterator<T> {
 
         // Keep track of the current element
-        Node<T> current;
+        private Node<T> current;
+
+        // Initialize iterator
+        GLIterator(Node<T> head) {
+            current = head;
+        }
 
         @Override
         public boolean hasNext() {
@@ -41,8 +41,21 @@ public abstract class GenericList<T> implements CreateIterator {
         }
     }
 
+    // Members to manage the list
     protected Node<T> head, tail;
     protected int length;
+
+    // Default initialization
+    GenericList() {
+        head = tail = null;
+        length = 0;
+    }
+
+    // Returns iterator that starts from the head of the list
+    public Iterator createIterator() {
+        GLIterator<T> iterator = new GLIterator<T>(head);
+        return iterator;
+    }
 
     // Prints the items of the list, one value per line
     public void print() {
@@ -79,10 +92,10 @@ public abstract class GenericList<T> implements CreateIterator {
             tail = null;
 
         setLength(length - 1);
-
         return node;
     }
 
+    // Returns a list as an array of values
     public ArrayList<T> dumpList() {
         ArrayList<T> list = new ArrayList<T>(length);
 

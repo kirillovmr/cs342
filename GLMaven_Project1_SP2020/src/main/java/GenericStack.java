@@ -1,6 +1,7 @@
 public class GenericStack<T> extends GenericList<T> {
 
     public GenericStack(T value) {
+        super();
         add(value);
     }
 

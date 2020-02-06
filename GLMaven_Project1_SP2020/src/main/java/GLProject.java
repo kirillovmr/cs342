@@ -5,6 +5,7 @@
 */
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class GLProject {
 
@@ -12,22 +13,6 @@ public class GLProject {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		System.out.println("hello generic lists");
-
-		GenericStack<Integer> q = new GenericStack<Integer>(1);
-		q.add(2);
-		q.add(4);
-		q.add(7);
-
-//		q.print();
-
-		while(q.getHead() != null) {
-			System.out.println(q.pop());
-		}
-
-		q.add(9);
-
-//		q.print();
-		System.out.println(q.dumpList());
 	}
 
 }

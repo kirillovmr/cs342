@@ -14,11 +14,11 @@ public class GenericStack<T> extends GenericList<T> {
         setHead(node);
 
         // Setting tail if list was empty
-        if (tail == null)
-            tail = node;
+        if (getTail() == null)
+            setTail(node);
 
         // Updating length
-        setLength(length + 1);
+        setLength(getLength() + 1);
     }
 
     public void push(T data) {

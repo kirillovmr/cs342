@@ -42,8 +42,8 @@ public abstract class GenericList<T> implements CreateIterator {
     }
 
     // Members to manage the list
-    protected Node<T> head, tail;
-    protected int length;
+    private Node<T> head, tail;
+    private int length;
 
     // Default initialization
     GenericList() {
@@ -89,7 +89,7 @@ public abstract class GenericList<T> implements CreateIterator {
 
         // Deleting tail if needed
         if (getHead() == null)
-            tail = null;
+            setTail(null);
 
         setLength(length - 1);
         return node;
@@ -108,20 +108,15 @@ public abstract class GenericList<T> implements CreateIterator {
         return list;
     }
 
-    public int getLength() {
-        return length;
-    }
+    public int getLength() { return length; }
 
-    protected void setLength(int len) {
-        length = len;
-    }
+    protected void setLength(int len) { length = len; }
 
-    public Node<T> getHead() {
-        return head;
-    }
+    public Node<T> getHead() { return head; }
 
-    protected void setHead(Node<T> node) {
-        node.next = head;
-        head = node;
-    }
+    protected void setHead(Node<T> node) { head = node; }
+
+    public Node<T> getTail() { return tail; }
+
+    protected void setTail(Node<T> node) { tail = node; }
 }

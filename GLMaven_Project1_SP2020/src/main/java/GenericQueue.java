@@ -14,12 +14,12 @@ public class GenericQueue<T> extends GenericList<T> {
             setHead(node);
 
         // Appending the node to the end
-        if (tail != null)
-            tail.next = node;
-        tail = node;
+        if (getTail() != null)
+            getTail().next = node;
+        setTail(node);
 
         // Updating length
-        setLength(length + 1);
+        setLength(getLength() + 1);
     }
 
     public void enqueue(T data) {

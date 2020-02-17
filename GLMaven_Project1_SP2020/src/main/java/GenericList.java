@@ -105,6 +105,11 @@ public abstract class GenericList<T> implements CreateIterator {
             node = node.next;
         }
 
+        // Making the list empty
+        setHead(null);
+        setTail(null);
+        setLength(0);
+
         return list;
     }
 

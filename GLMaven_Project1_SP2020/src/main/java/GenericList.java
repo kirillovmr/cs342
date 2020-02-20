@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public abstract class GenericList<T> implements CreateIterator {
+public abstract class GenericList<T> implements CreateIterator<T>, Iterable<T> {
 
     // Encapsulated Node class
     public class Node<T> {
@@ -52,9 +52,13 @@ public abstract class GenericList<T> implements CreateIterator {
     }
 
     // Returns iterator that starts from the head of the list
-    public Iterator createIterator() {
-        GLIterator<T> iterator = new GLIterator<T>(head);
-        return iterator;
+    public Iterator<T> createIterator() {
+        return new GLIterator<T>(head);
+    }
+
+    // Implementing Iterable interface
+    public Iterator<T> iterator() {
+        return new GLIterator<T>(head);
     }
 
     // Prints the items of the list, one value per line
@@ -117,11 +121,11 @@ public abstract class GenericList<T> implements CreateIterator {
 
     protected void setLength(int len) { length = len; }
 
-    public Node<T> getHead() { return head; }
+    protected Node<T> getHead() { return head; }
 
     protected void setHead(Node<T> node) { head = node; }
 
-    public Node<T> getTail() { return tail; }
+    protected Node<T> getTail() { return tail; }
 
     protected void setTail(Node<T> node) { tail = node; }
 }

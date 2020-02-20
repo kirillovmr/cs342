@@ -26,6 +26,7 @@ public class GenericStack<T> extends GenericList<T> {
     }
 
     public T pop() {
-        return delete().data;
+        Node<T> temp = delete();
+        return temp == null ? null : temp.data;
     }
 }

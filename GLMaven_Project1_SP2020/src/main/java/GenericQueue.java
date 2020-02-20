@@ -27,6 +27,7 @@ public class GenericQueue<T> extends GenericList<T> {
     }
 
     public T dequeue() {
-        return delete().data;
+        Node<T> temp = delete();
+        return temp == null ? null : temp.data;
     }
 }

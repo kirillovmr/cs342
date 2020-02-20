@@ -1,13 +1,176 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 class ListTest {
 
-	
-	@Test
-	void test() {
-		fail("Not yet implemented");
+	GenericStack<Integer> stack;
+	int initVal = 1;
+
+	@BeforeEach
+	void init() {
+		stack = new GenericStack<Integer>(initVal);
 	}
 
+	@Test
+	void testInitGS() {
+		assertEquals("GenericStack", stack.getClass().getName(),"init failed on GS");
+	}
+
+	@Test
+	void testInitNode() {
+		assertEquals("GenericList$Node", stack.getHead().getClass().getName(), "node not init");
+	}
+
+	@Test
+	void initValue() {
+		assertEquals(initVal, stack.pop(), "Wrong initial value");
+	}
+
+	@Test
+	void initLength() {
+		assertEquals(1, stack.getLength(), "Wrong initial length");
+	}
+
+	@Test
+	void lengthAfterPopOnEmpty() {
+		// Removing initial value
+		stack.pop();
+
+		// Pop on empty
+		stack.pop();
+		assertEquals(0, stack.getLength(), "Pop on empty stack changes length");
+	}
+
+	@Test
+	void length() {
+		// Populating list
+		for (int i=2; i<10; i++) {
+			stack.push(i);
+			assertEquals(i, stack.getLength(), "Wrong length after push");
+		}
+
+		// Popping list
+		for (int i = stack.getLength(); i>0; i--) {
+			stack.pop();
+			assertEquals(i-1, stack.getLength(), "Wrong length after pop");
+		}
+	}
+
+	@Test
+	void pushValues() {
+		// Populating list with non-sequential values
+		for(int i=0; i<10; i++) {
+			int valueToPush = i*2+2;
+			stack.push(valueToPush);
+			assertEquals(valueToPush, stack.pop(), "Wrong value on top");
+		}
+	}
+
+	@Test
+	void popValues() {
+		ArrayList<Integer> list = new ArrayList<Integer>(11);
+		list.add(initVal);
+
+		Random rand = new Random();
+
+		// Pushing random values
+		for(int i=0; i<10; i++) {
+			int val = rand.nextInt(10000);
+			stack.push(val);
+			list.add(val);
+		}
+
+		for(int i=0; i<10; i++) {
+			assertEquals(list.get(list.size() - 1 - i), stack.pop(), "Wrong value after pop");
+		}
+	}
+
+	@Test
+	void popOnEmpty() {
+		// Removing initial value
+		stack.pop();
+
+		assertEquals(null, stack.pop(), "Pop on empty returns not null");
+	}
+
+	@Test
+	void dumpList() {
+		ArrayList<Integer> list = new ArrayList<Integer>(11);
+		list.add(initVal);
+
+		Random rand = new Random();
+
+		// Pushing random values
+		for(int i=0; i<10; i++) {
+			int val = rand.nextInt(10000);
+			stack.push(val);
+			list.add(val);
+		}
+
+		ArrayList<Integer> stackDumped = stack.dumpList();
+		for(int i=0; i<list.size(); i++) {
+			assertEquals(list.get(list.size()-1-i), stackDumped.get(i), "Dump list returns wrong values");
+		}
+	}
+
+	@Test
+	void emptyListAfterDump() {
+		// Populate stack
+		for(int i=0; i<5; i++) {
+			stack.push(i);
+		}
+		stack.dumpList();
+
+		assertEquals(0, stack.getLength(), "Length after dump != 0");
+		assertEquals(null, stack.pop(), "Pop after dump returns not null");
+	}
+
+	@Test
+	void clearPopulateClear() {
+		// Populating
+		for(int i=2; i<10; i++) {
+			stack.push(i);
+			assertEquals(i, stack.getHead().data, "Top value is wrong");
+		}
+
+		// Emptying
+		for(int i=9; i>0; i--) {
+			assertEquals(i, stack.pop(), "Pop after populating returns wrong value");
+		}
+
+		// Checking for empty
+		assertEquals(null, stack.pop(), "Stack is not clear");
+
+		// Populating once again
+		for(int i=13; i<20; i++) {
+			stack.push(i);
+			assertEquals(i, stack.getHead().data, "Populates wrong values after being cleared");
+		}
+	}
+
+	@Test
+	void genericTest() {
+		// Strings
+		GenericStack<String> s = new GenericStack<>("Hi there");
+		assertEquals("Hi there", s.pop(), "Pop returned the wrong string");
+
+		// Custom type
+		class Q {
+			private int value;
+			Q(int initValue) { value = initValue; }
+			int getValue() { return value; }
+		}
+
+		GenericStack<Q> s2 = new GenericStack<>(new Q(12));
+		s2.push(new Q(15));
+
+		assertEquals(15, s2.pop().getValue(), "Pop returned the wrong custom type object");
+		assertEquals(12, s2.pop().getValue(), "Pop returned the wrong custom type object");
+		assertEquals(null, s2.pop(), "Pop returned the wrong custom type object");
+	}
 }

@@ -13,6 +13,8 @@ public class GLProject {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		System.out.println("hello generic lists");
+		GenericStack<Integer> s = new GenericStack<Integer>(1);
+		s.getTail();
 	}
 
 }

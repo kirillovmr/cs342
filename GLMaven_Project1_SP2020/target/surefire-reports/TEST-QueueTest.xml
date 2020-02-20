@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="ListTest" time="0.002" tests="13" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="QueueTest" time="0.019" tests="13" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="13"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -53,17 +53,17 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="57.0"/>
   </properties>
-  <testcase name="dumpList" classname="ListTest" time="0"/>
-  <testcase name="popValues" classname="ListTest" time="0"/>
-  <testcase name="popOnEmpty" classname="ListTest" time="0"/>
-  <testcase name="lengthAfterPopOnEmpty" classname="ListTest" time="0"/>
-  <testcase name="length" classname="ListTest" time="0"/>
-  <testcase name="clearPopulateClear" classname="ListTest" time="0"/>
-  <testcase name="initValue" classname="ListTest" time="0"/>
-  <testcase name="initLength" classname="ListTest" time="0"/>
-  <testcase name="testInitNode" classname="ListTest" time="0"/>
-  <testcase name="genericTest" classname="ListTest" time="0"/>
-  <testcase name="emptyListAfterDump" classname="ListTest" time="0"/>
-  <testcase name="testInitGS" classname="ListTest" time="0"/>
-  <testcase name="pushValues" classname="ListTest" time="0.001"/>
+  <testcase name="dumpList" classname="QueueTest" time="0"/>
+  <testcase name="length" classname="QueueTest" time="0.001"/>
+  <testcase name="lengthAfterDequeueOnEmpty" classname="QueueTest" time="0.001"/>
+  <testcase name="clearPopulateClear" classname="QueueTest" time="0"/>
+  <testcase name="initValue" classname="QueueTest" time="0.001"/>
+  <testcase name="dequeueOnEmpty" classname="QueueTest" time="0"/>
+  <testcase name="initLength" classname="QueueTest" time="0.001"/>
+  <testcase name="dequeueValues" classname="QueueTest" time="0"/>
+  <testcase name="enqueueValues" classname="QueueTest" time="0.002"/>
+  <testcase name="testInitNode" classname="QueueTest" time="0.001"/>
+  <testcase name="genericTest" classname="QueueTest" time="0.001"/>
+  <testcase name="emptyListAfterDump" classname="QueueTest" time="0"/>
+  <testcase name="testInitGS" classname="QueueTest" time="0"/>
 </testsuite>

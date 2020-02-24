@@ -1,10 +1,13 @@
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("Iterator and Iterable implementation Tests")
 class IteratorIterableTest {
 
     GenericStack<Integer> s;
@@ -16,31 +19,41 @@ class IteratorIterableTest {
     }
 
     @Test
+    @Tag("init")
+    @DisplayName("Proper Iterator initialization")
     void testInitIterator() {
         Iterator it = s.createIterator();
         assertEquals("GenericList$GLIterator", it.getClass().getName(),"init failed on Iterator");
     }
 
     @Test
+    @Tag("hasNext")
+    @DisplayName("hasNext() returns true on non empty list")
     void hasNextNonEmptyStack() {
         Iterator it = s.createIterator();
-        assertEquals(true, it.hasNext(), "hasNext() returned the wrong value");
+        assertTrue(it.hasNext(), "hasNext() returned the wrong value");
     }
 
     @Test
+    @Tag("hasNext")
+    @DisplayName("hasNext() returns false on empty list")
     void hasNextEmptyStack() {
         s.dumpList();
         Iterator it = s.createIterator();
-        assertEquals(false, it.hasNext(), "hasNext() returned the wrong value");
+        assertFalse(it.hasNext(), "hasNext() returned the wrong value");
     }
 
     @Test
+    @Tag("next")
+    @DisplayName("next() returns value on non empty list")
     void nextNonEmptyStack() {
         Iterator it = s.createIterator();
         assertNotEquals(null, it.next(), "Next returned null on non-empty stack");
     }
 
     @Test
+    @Tag("next")
+    @DisplayName("next() returns null on empty list")
     void nextEmptyStack() {
         s.dumpList();
         Iterator it = s.createIterator();
@@ -48,6 +61,8 @@ class IteratorIterableTest {
     }
 
     @Test
+    @Tag("iterator")
+    @DisplayName("Iterator goes through the list correctly")
     void iterateOverList() {
         Iterator it = s.createIterator();
         int i = 9;
@@ -57,6 +72,8 @@ class IteratorIterableTest {
     }
 
     @Test
+    @Tag("iterator")
+    @DisplayName("Iterator works properly after dumpList()")
     void createIteratorThenDump() {
         Iterator it = s.createIterator();
         s.dumpList();
@@ -67,6 +84,8 @@ class IteratorIterableTest {
     }
 
     @Test
+    @Tag("iterator")
+    @DisplayName("Iterator works properly after list is modified")
     void createIteratorThenModifyList() {
         Iterator it = s.createIterator();
         s.getHead().data = 99;
@@ -78,6 +97,8 @@ class IteratorIterableTest {
     }
 
     @Test
+    @Tag("iterator")
+    @DisplayName("Iterator doesn't go through empty list")
     void iterateOverEmptyList() {
         s.dumpList();
         Iterator<Integer> it = s.createIterator();
@@ -88,6 +109,8 @@ class IteratorIterableTest {
     }
 
     @Test
+    @Tag("iterable")
+    @DisplayName("Enhanced for loop iterates correctly")
     void iterableNonEmptyList() {
         int i = 9;
         for(int val: s) {
@@ -96,6 +119,8 @@ class IteratorIterableTest {
     }
 
     @Test
+    @Tag("iterable")
+    @DisplayName("Enhanced for loop doesn't iterate through empty list")
     void iterableEmptyList() {
         s.dumpList();
         for(int val: s) {

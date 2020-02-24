@@ -1,11 +1,14 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+@DisplayName("GenericQueue Tests")
 class QueueTest {
 
     GenericQueue<Integer> q;
@@ -17,26 +20,36 @@ class QueueTest {
     }
 
     @Test
+    @Tag("init")
+    @DisplayName("Proper initialization of GenericQueue")
     void testInitGS() {
         assertEquals("GenericQueue", q.getClass().getName(),"init failed on GQ");
     }
 
     @Test
+    @Tag("init")
+    @DisplayName("Proper initialization of GenericList Node")
     void testInitNode() {
         assertEquals("GenericList$Node", q.getHead().getClass().getName(), "node not init");
     }
 
     @Test
+    @Tag("init")
+    @DisplayName("Proper Initial value")
     void initValue() {
         assertEquals(initVal, q.dequeue(), "Wrong initial value");
     }
 
     @Test
+    @Tag("init")
+    @DisplayName("Proper initial length")
     void initLength() {
         assertEquals(1, q.getLength(), "Wrong initial length");
     }
 
     @Test
+    @Tag("length")
+    @DisplayName("Pop on empty queue doesn't affect length")
     void lengthAfterDequeueOnEmpty() {
         // Removing initial value
         q.dequeue();
@@ -47,6 +60,8 @@ class QueueTest {
     }
 
     @Test
+    @Tag("length")
+    @DisplayName("Proper length changing")
     void length() {
         // Populating list
         for (int i=2; i<10; i++) {
@@ -62,6 +77,8 @@ class QueueTest {
     }
 
     @Test
+    @Tag("add")
+    @DisplayName("Testing enqueue()")
     void enqueueValues() {
         int prevValue = initVal;
 
@@ -75,6 +92,8 @@ class QueueTest {
     }
 
     @Test
+    @Tag("delete")
+    @DisplayName("Testing dequeue()")
     void dequeueValues() {
         ArrayList<Integer> list = new ArrayList<Integer>(11);
         list.add(initVal);
@@ -94,6 +113,8 @@ class QueueTest {
     }
 
     @Test
+    @Tag("delete")
+    @DisplayName("Testing dequeue() on empty queue")
     void dequeueOnEmpty() {
         // Removing initial value
         q.dequeue();
@@ -102,6 +123,8 @@ class QueueTest {
     }
 
     @Test
+    @Tag("dump")
+    @DisplayName("Testing dumpList()")
     void dumpList() {
         ArrayList<Integer> list = new ArrayList<Integer>(11);
         list.add(initVal);
@@ -122,6 +145,8 @@ class QueueTest {
     }
 
     @Test
+    @Tag("dump")
+    @DisplayName("dumpList() makes queue empty")
     void emptyListAfterDump() {
         // Populate queue
         for(int i=0; i<5; i++) {
@@ -134,6 +159,9 @@ class QueueTest {
     }
 
     @Test
+    @Tag("add")
+    @Tag("delete")
+    @DisplayName("Queue works properly after clearing")
     void clearPopulateClear() {
         // Populating
         for(int i=2; i<10; i++) {
@@ -157,6 +185,8 @@ class QueueTest {
     }
 
     @Test
+    @Tag("generic")
+    @DisplayName("Queue supports custom types")
     void genericTest() {
         // Strings
         GenericQueue<String> q = new GenericQueue<>("Hi there");

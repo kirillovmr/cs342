@@ -1,0 +1,13 @@
+.root {
+    -fx-background-color: rgb(44, 44, 50);
+}
+
+#table-back {
+    -fx-fill: rgb(104, 108, 120);
+    -fx-background-color: rgb(104, 108, 120);
+}
+
+#table-front {
+    -fx-border-color: rgb(75, 78, 88);
+    -fx-fill: rgb(87, 90, 102);
+}

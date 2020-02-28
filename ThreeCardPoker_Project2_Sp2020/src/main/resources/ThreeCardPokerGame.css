@@ -1,13 +1,125 @@
+
 .root {
     -fx-background-color: rgb(44, 44, 50);
+}
+
+.shadow {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 0);
+}
+
+#sceneVBox {
+    -fx-spacing: 20;
+    -fx-alignment: top-center;
 }
 
 #table-back {
     -fx-fill: rgb(104, 108, 120);
     -fx-background-color: rgb(104, 108, 120);
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
 }
 
 #table-front {
     -fx-border-color: rgb(75, 78, 88);
     -fx-fill: rgb(87, 90, 102);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 30, 0, 0, 0);
+}
+
+.dealerImage {
+
+}
+
+.wagerInput {
+    -fx-max-width: 60;
+    -fx-text-fill: white;
+    -fx-background-color: rgb(44, 44, 50);
+    -fx-background-radius: 10;
+
+    -fx-border-color: rgb(27, 27, 33);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+
+    -fx-font-size: 15;
+}
+.wagerBox {
+    -fx-spacing: 25;
+    -fx-alignment: center;
+}
+.wagerRow {
+    -fx-alignment: baseline-center;
+}
+.wagerRowText {
+    -fx-fill: rgb(39, 39, 39);
+    -fx-font-family: "Andale Mono";
+    -fx-font-size: 22;
+}
+
+.cardBox {
+    -fx-spacing: 10;
+}
+.dealerCardsBox {
+    -fx-alignment: center;
+    -fx-padding: 45, 0, 0, 0;
+}
+.playersCardsRow {
+    -fx-alignment: center;
+    -fx-spacing: 60;
+}
+.bottomBox {
+    -fx-spacing: 20;
+    -fx-padding: 45, 0, 0, 0;
+}
+
+.pairPlusRow {
+    -fx-spacing: 240;
+}
+.anteRow {
+    -fx-spacing: 140;
+}
+
+.gameBtn {
+    -fx-min-width: 60px;
+    -fx-border-width: 1;
+    -fx-border-color: #fff;
+    -fx-border-radius: 5;
+
+    -fx-text-fill: rgb(255, 255, 255);
+
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-background-radius: 5;
+}
+.gameBtn:hover {
+    -fx-cursor: hand;
+}
+.playButton {
+    -fx-border-color: rgb(46, 204, 113);
+}
+.playButton:hover {
+    -fx-border-color: rgba(46, 204, 113, 0.7);
+    -fx-background-color: rgba(116, 204, 147, 0.1);
+}
+.foldButton {
+    -fx-border-color: rgb(241, 196, 15);
+}
+.foldButton:hover {
+    -fx-border-color: rgba(241, 196, 15, 0.7);
+    -fx-background-color: rgba(241, 215, 96, 0.1);
+}
+.dealButton {
+    -fx-min-width: 80px;
+    -fx-min-height: 40px;
+    -fx-border-width: 2;
+    -fx-border-color: rgb(85, 172, 238);
+}
+.dealButton:hover {
+    -fx-border-width: 2;
+    -fx-border-color: rgba(85, 172, 238, 0.7);
+    -fx-background-color: rgba(119, 190, 238, 0.1);
+}
+.buttonsBox {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}
+.buttonsRow {
+    -fx-spacing: 80;
+    -fx-alignment: center;
 }

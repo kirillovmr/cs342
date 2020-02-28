@@ -23,6 +23,10 @@ public class Card {
         return value;
     }
 
+    public String toResourceName() {
+        return "" + suit + value + ".png";
+    }
+
     public String toString() {
         return "" + suit + ":" + value;
     }

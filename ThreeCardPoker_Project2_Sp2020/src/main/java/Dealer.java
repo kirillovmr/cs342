@@ -38,4 +38,13 @@ public class Dealer {
 
         return new ArrayList<Card>(dealersHand);
     }
+
+    public ArrayList<Card> getHand() {
+        return dealersHand;
+    }
+
+    public void setHand(ArrayList<Card> dealersHand) {
+        this.dealersHand = dealersHand;
+    }
+
 }

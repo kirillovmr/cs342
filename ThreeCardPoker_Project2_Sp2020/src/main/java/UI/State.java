@@ -1,25 +1,27 @@
+package UI;
+
 public class State {
     // Activates on deal button press
-    boolean gameStarted;
+    public boolean gameStarted;
 
     // Did players select a button?
-    boolean player1Chosen;
-    boolean player2Chosen;
+    public boolean player1Chosen;
+    public boolean player2Chosen;
 
-    // Was UI updated?
-    boolean player1UIUpdated;
-    boolean player2UIUpdated;
+    // Was UI.UI updated?
+    public boolean player1UIUpdated;
+    public boolean player2UIUpdated;
 
     // Did players select play?
-    boolean player1ChosenPlay;
-    boolean player2ChosenPlay;
+    public boolean player1ChosenPlay;
+    public boolean player2ChosenPlay;
 
-    State() {
+    public State() {
         init();
     }
 
     // Restores initial game state
-    void init() {
+    public void init() {
         gameStarted = false;
         player1Chosen = false;
         player2Chosen = false;

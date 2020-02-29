@@ -1,3 +1,5 @@
+package UI;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 
 public class UI_Table {
 
-    static HBox createWagerBox(String value, String text, boolean left, ArrayList<TextField> uiInputs) {
+    public static HBox createWagerBox(String value, String text, boolean left, ArrayList<TextField> uiInputs) {
         TextField wagerInput = new TextField(value);
         wagerInput.getStyleClass().addAll("wagerInput", "shadow");
         wagerInput.setAlignment(left ? Pos.CENTER_LEFT : Pos.CENTER_RIGHT);
@@ -30,7 +32,7 @@ public class UI_Table {
         return wagerBox;
     }
 
-    static HBox createWagerRow(String value, int maxWidth, String text, ArrayList<TextField> uiInputs) {
+    public static HBox createWagerRow(String value, int maxWidth, String text, ArrayList<TextField> uiInputs) {
         HBox wagerRow = new HBox(
             createWagerBox(value, text, true, uiInputs),
             createWagerBox(value, text, false, uiInputs)
@@ -39,7 +41,7 @@ public class UI_Table {
         return  wagerRow;
     }
 
-    static HBox createPlayersCardsRow(ArrayList<ArrayList<ImageView>> uiCards) {
+    public static HBox createPlayersCardsRow(ArrayList<ArrayList<ImageView>> uiCards) {
         HBox playersCardsRow = new HBox(
             UI.createCardBox(uiCards.get(1), "player1Card"),
             UI.createCardBox(uiCards.get(2), "player2Card")
@@ -48,7 +50,7 @@ public class UI_Table {
         return playersCardsRow;
     }
 
-    static StackPane createTable(ArrayList<ArrayList<ImageView>> uiCards, ArrayList<TextField> uiInputs) {
+    public static StackPane createTable(ArrayList<ArrayList<ImageView>> uiCards, ArrayList<TextField> uiInputs) {
         final int tableWidth = (int) (GameConstants.globalWidth * 0.7);
         final int tableHeight = (int) (GameConstants.globalHeight * 0.5);
 

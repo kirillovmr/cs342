@@ -1,3 +1,5 @@
+package UI;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
@@ -12,23 +14,22 @@ import java.util.ArrayList;
 
 public class UI {
 
-    static ToolBar createToolbar() {
+    public static ToolBar createToolbar() {
         ToolBar toolBar = new ToolBar(
                 new Button("New"),
                 new Button("Options"),
                 new Button("Exit")
         );
-
         return toolBar;
     }
 
-    static HBox spacer(int padding) {
+    public static HBox spacer(int padding) {
         HBox spacer = new HBox();
         spacer.setPadding(new Insets(padding, 0, 0, 0));
         return spacer;
     }
 
-    static ImageView loadImage(String filename, double scale) {
+    public static ImageView loadImage(String filename, double scale) {
         try {
             Image image = new Image(new FileInputStream("src/res/" + filename));
             ImageView imageView = new ImageView(image);
@@ -42,7 +43,7 @@ public class UI {
         }
     }
 
-    static ImageView createDealerImage() {
+    public static ImageView createDealerImage() {
         double scale = (double)(GameConstants.globalWidth) / 3000;
 
         ImageView dealerImage = loadImage("dealer.png", scale);
@@ -50,7 +51,7 @@ public class UI {
         return dealerImage;
     }
 
-    static ImageView createCardImage(String id) {
+    public static ImageView createCardImage(String id) {
         double scale = (double)(GameConstants.globalWidth) / 8000;
 
         ImageView card = loadImage("card_back.png", scale);
@@ -59,7 +60,7 @@ public class UI {
         return card;
     }
 
-    static HBox createCardBox(ArrayList<ImageView> uiPlayerCards, String idPrefix) {
+    public static HBox createCardBox(ArrayList<ImageView> uiPlayerCards, String idPrefix) {
         HBox cardBox = new HBox();
 
         for(byte i=0; i<3; i++) {
@@ -71,16 +72,7 @@ public class UI {
         return cardBox;
     }
 
-    static Button createButton(String text, String className, String id, ArrayList<Button> uiButtons) {
-        Button button = new Button(text);
-        button.setId(id);
-        button.getStyleClass().addAll("gameBtn", "shadow", className);
-
-        uiButtons.add(button);
-        return button;
-    }
-
-    static HBox createGameButtons(ArrayList<Button> uiButtons) {
+    public static HBox createGameButtons(ArrayList<Button> uiButtons) {
         HBox leftButtonsBox = new HBox(
                 createButton("Play", "playButton", "btnPlay1", uiButtons),
                 createButton("Fold", "foldButton", "btnFold1", uiButtons)
@@ -100,7 +92,16 @@ public class UI {
         return buttonsRow;
     }
 
-    static HBox createMoneyBox(ArrayList<Text> uiText) {
+    static Button createButton(String text, String className, String id, ArrayList<Button> uiButtons) {
+        Button button = new Button(text);
+        button.setId(id);
+        button.getStyleClass().addAll("gameBtn", "shadow", className);
+
+        uiButtons.add(button);
+        return button;
+    }
+
+    public static HBox createMoneyBox(ArrayList<Text> uiText) {
         Text p1 = new Text(Integer.toString(GameConstants.initialMoneyValue));
         uiText.add(p1);
 

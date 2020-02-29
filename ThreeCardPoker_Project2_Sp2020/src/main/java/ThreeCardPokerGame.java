@@ -1,5 +1,5 @@
+import UI.*;
 import javafx.animation.KeyFrame;
-import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -16,8 +15,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class ThreeCardPokerGame extends Application {
@@ -58,17 +55,20 @@ public class ThreeCardPokerGame extends Application {
 
 		this.createEventHandlers();
 
-		// Creating UI
+		// Creating UI.UI
 		ToolBar toolbar = UI.createToolbar();
 		ImageView dealer = UI.createDealerImage();
 		StackPane table = UI_Table.createTable(uiCards, uiInputs);
 		HBox playButtons = UI.createGameButtons(uiButtons);
 		HBox moneyBox = UI.createMoneyBox(uiText);
 
-		// Setting up UI elements
+		// Setting up UI.UI elements
 		this.setupUIElements();
 
-		VBox root = new VBox(UI.spacer(30), dealer, table, playButtons);
+		UICard card = new UICard();
+		card.setFrontImage("C4.png");
+
+		VBox root = new VBox(UI.spacer(30), dealer, table, playButtons, card);
 		root.setId("sceneVBox");
 
 		Scene scene = new Scene(root, GameConstants.globalWidth, GameConstants.globalHeight);
@@ -107,8 +107,8 @@ public class ThreeCardPokerGame extends Application {
 			Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), new EventHandler<ActionEvent>() {
 				private int i = 0;
 				public void handle(ActionEvent event) {
-					openCard(uiCards.get(1).get(i), playerOne.getHand().get(i).toResourceName(), null);
-					openCard(uiCards.get(2).get(i), playerTwo.getHand().get(i).toResourceName(), null);
+					UIMisc.openCard(uiCards.get(1).get(i), playerOne.getHand().get(i).toResourceName(), null);
+					UIMisc.openCard(uiCards.get(2).get(i), playerTwo.getHand().get(i).toResourceName(), null);
 					i++;
 				}
 			}));
@@ -129,33 +129,6 @@ public class ThreeCardPokerGame extends Application {
 		};
 	}
 
-	void animateFlip(ImageView image, EventHandler<ActionEvent> onFinished) {
-		ScaleTransition transition = new ScaleTransition(Duration.millis(GameConstants.cardFlipAnimationTime), image);
-		transition.setByX(-0.9f);
-		transition.setCycleCount(2);
-		transition.setAutoReverse(true);
-		transition.setOnFinished(onFinished);
-		transition.play();
-	}
-
-	void openCard(ImageView card, String filename, EventHandler<ActionEvent> onFinished) {
-		animateFlip(card, onFinished);
-		try {
-			card.setImage(new Image(new FileInputStream("src/res/cards/" + filename)));
-		} catch (FileNotFoundException e) {
-			System.err.println(">< openCard: File " + filename + " was not found");
-		}
-	}
-
-	void closeCard(ImageView card, EventHandler<ActionEvent> onFinished) {
-		animateFlip(card, onFinished);
-		try {
-			card.setImage(new Image(new FileInputStream("src/res/card_back.png")));
-		} catch (FileNotFoundException e) {
-			System.err.println(">< openCard: File card_back.png was not found");
-		}
-	}
-
 	void setupUIElements() {
 
 		// Cheat: Flip dealers card on click
@@ -168,8 +141,8 @@ public class ThreeCardPokerGame extends Application {
 						int cardIdx = cardId.charAt(cardId.length() - 1) - 48;
 
 						animating = true;
-						openCard(card, theDealer.getHand().get(cardIdx).toResourceName(), onFinishOpenEvent -> {
-							closeCard(card, onFinishCloseEvent -> {
+						UIMisc.openCard(card, theDealer.getHand().get(cardIdx).toResourceName(), onFinishOpenEvent -> {
+							UIMisc.closeCard(card, onFinishCloseEvent -> {
 								animating = false;
 							});
 						});
@@ -183,7 +156,6 @@ public class ThreeCardPokerGame extends Application {
 		for(TextField field : uiInputs) {
 			int finalI = fieldNum;
 			field.textProperty().addListener((observable, oldValue, newValue) -> {
-
 				int parsedInt = -1;
 				try {
 					parsedInt = Integer.parseInt(newValue);
@@ -286,7 +258,7 @@ public class ThreeCardPokerGame extends Application {
 			}
 			else {
 				for(ImageView card : uiCards.get(1)) {
-					makeCardSmaller(card);
+					UIMisc.makeCardSmaller(card);
 				}
 			}
 
@@ -302,7 +274,7 @@ public class ThreeCardPokerGame extends Application {
 			}
 			else {
 				for(ImageView card : uiCards.get(2)) {
-					makeCardSmaller(card);
+					UIMisc.makeCardSmaller(card);
 				}
 			}
 
@@ -320,7 +292,7 @@ public class ThreeCardPokerGame extends Application {
 			Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), new EventHandler<ActionEvent>() {
 				private int i = 0;
 				public void handle(ActionEvent event) {
-					openCard(uiCards.get(0).get(i), theDealer.getHand().get(i).toResourceName(), null);
+					UIMisc.openCard(uiCards.get(0).get(i), theDealer.getHand().get(i).toResourceName(), null);
 					i++;
 				}
 			}));
@@ -387,7 +359,7 @@ public class ThreeCardPokerGame extends Application {
 				}
 				else {
 					for(ImageView card: uiCards.get(1)) {
-						restoreCardSize(card);
+						UIMisc.restoreCardSize(card);
 					}
 				}
 			}
@@ -398,7 +370,7 @@ public class ThreeCardPokerGame extends Application {
 				}
 				else {
 					for(ImageView card: uiCards.get(2)) {
-						restoreCardSize(card);
+						UIMisc.restoreCardSize(card);
 					}
 				}
 			}
@@ -413,7 +385,7 @@ public class ThreeCardPokerGame extends Application {
 				// Closing cards
 				for(ArrayList<ImageView> arr : uiCards) {
 					for (ImageView card : arr) {
-						closeCard(card, null);
+						UIMisc.closeCard(card, null);
 					}
 				}
 
@@ -431,21 +403,6 @@ public class ThreeCardPokerGame extends Application {
 			timeline2.play();
 		});
 		timeline.play();
-	}
-
-
-	void makeCardSmaller(ImageView card) {
-		ScaleTransition transition = new ScaleTransition(Duration.millis(GameConstants.cardScaleAnimationTime), card);
-		transition.setByX(-0.5f);
-		transition.setByY(-0.5f);
-		transition.play();
-	}
-
-	void restoreCardSize(ImageView card) {
-		ScaleTransition transition = new ScaleTransition(Duration.millis(GameConstants.cardScaleAnimationTime), card);
-		transition.setByX(0.5f);
-		transition.setByY(0.5f);
-		transition.play();
 	}
 
 }

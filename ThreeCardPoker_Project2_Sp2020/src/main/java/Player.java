@@ -1,3 +1,5 @@
+import UI.MyHandler;
+
 import java.util.ArrayList;
 
 /*
@@ -13,6 +15,8 @@ public class Player {
     protected int playBet;
     protected int pairPlusBet;
     protected int totalWinnings;
+
+    private MyHandler onBetChange = (dummy) -> {};
 
     Player() {
         hand = new ArrayList<Card>();
@@ -33,6 +37,7 @@ public class Player {
 
     public void setAnteBet(int anteBet) {
         this.anteBet = anteBet;
+        onBetChange.run(0);
     }
 
     public int getPlayBet() {
@@ -41,6 +46,7 @@ public class Player {
 
     public void setPlayBet(int playBet) {
         this.playBet = playBet;
+        onBetChange.run(0);
     }
 
     public int getPairPlusBet() {
@@ -49,6 +55,7 @@ public class Player {
 
     public void setPairPlusBet(int pairPlusBet) {
         this.pairPlusBet = pairPlusBet;
+        onBetChange.run(0);
     }
 
     public int getTotalWinnings() {
@@ -57,5 +64,9 @@ public class Player {
 
     public void setTotalWinnings(int totalWinnings) {
         this.totalWinnings = totalWinnings;
+    }
+
+    public void setOnBetChange(MyHandler onBetChange) {
+        this.onBetChange = onBetChange;
     }
 }

@@ -15,18 +15,16 @@ public class UICard extends ImageView {
 
     boolean showingFace = false;
     boolean animating = false;
+    boolean scaled = false;
 
-    public UICard() {
+    public UICard(String id) {
         super(UIMisc.createImage(GameConstants.cardBackFilename));
         this.setFitHeight(this.getImage().getHeight() * GameConstants.cardScale);
         this.setFitWidth(this.getImage().getWidth() * GameConstants.cardScale);
+        this.setId(id);
 
         backImage = this.getImage();
         frontImage = null;
-
-        this.setOnMouseClicked(e -> {
-            flip(ev -> flip(null));
-        });
     }
 
     public UICard(Image image) {
@@ -34,21 +32,17 @@ public class UICard extends ImageView {
     }
 
     public void flip(EventHandler<ActionEvent> onFinish) {
-        Timeline finishAnim = new Timeline(new KeyFrame(Duration.millis(GameConstants.cardFlipAnimationTime), event -> {
-            animating = false;
-        }));
-        finishAnim.setOnFinished(onFinish);
-
+        Timeline finishAnim = getFinishAnimation(onFinish);
         if (animating)
             return;
 
         animating = true;
         if (frontImage == null) {
-            animateFlip(e -> { finishAnim.play(); });
+            animateFlip(e -> finishAnim.play());
             return;
         }
 
-        animateFlip(e -> { finishAnim.play(); });
+        animateFlip(e -> finishAnim.play());
         this.setImage(showingFace ? backImage : frontImage);
         showingFace = !showingFace;
     }
@@ -59,12 +53,46 @@ public class UICard extends ImageView {
             this.setImage(frontImage);
     }
 
-    private void animateFlip(EventHandler<ActionEvent> onFinished) {
+    public void makeSmaller() {
+        Timeline finishAnim = getFinishAnimation(e -> scaled = true);
+        if (animating || scaled)
+            return;
+
+        animating = true;
+        ScaleTransition transition = new ScaleTransition(Duration.millis(GameConstants.cardScaleAnimationTime), this);
+        transition.setByX(-0.5f);
+        transition.setByY(-0.5f);
+        transition.setOnFinished(e -> finishAnim.play());
+        transition.play();
+    }
+
+    public void restoreSize() {
+        Timeline finishAnim = getFinishAnimation(e -> scaled = false);
+        if (animating || !scaled)
+            return;
+
+        animating = true;
+        ScaleTransition transition = new ScaleTransition(Duration.millis(GameConstants.cardScaleAnimationTime), this);
+        transition.setByX(0.5f);
+        transition.setByY(0.5f);
+        transition.setOnFinished(e -> finishAnim.play());
+        transition.play();
+    }
+
+    private void animateFlip(EventHandler<ActionEvent> onFinish) {
         ScaleTransition transition = new ScaleTransition(Duration.millis(GameConstants.cardFlipAnimationTime), this);
         transition.setByX(-0.9f);
         transition.setCycleCount(2);
         transition.setAutoReverse(true);
-        transition.setOnFinished(onFinished);
+        transition.setOnFinished(onFinish);
         transition.play();
+    }
+
+    private Timeline getFinishAnimation(EventHandler<ActionEvent> onFinish) {
+        Timeline finishAnim = new Timeline(new KeyFrame(Duration.millis(GameConstants.cardFlipAnimationTime), event -> {
+            animating = false;
+        }));
+        finishAnim.setOnFinished(onFinish);
+        return finishAnim;
     }
 }

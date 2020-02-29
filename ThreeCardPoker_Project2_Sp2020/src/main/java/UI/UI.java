@@ -60,11 +60,11 @@ public class UI {
         return card;
     }
 
-    public static HBox createCardBox(ArrayList<ImageView> uiPlayerCards, String idPrefix) {
+    public static HBox createCardBox(ArrayList<UICard> uiPlayerCards, String idPrefix) {
         HBox cardBox = new HBox();
 
         for(byte i=0; i<3; i++) {
-            uiPlayerCards.add(createCardImage(idPrefix + i));
+            uiPlayerCards.add(new UICard(idPrefix + i));
             cardBox.getChildren().add( uiPlayerCards.get(i) );
         }
 

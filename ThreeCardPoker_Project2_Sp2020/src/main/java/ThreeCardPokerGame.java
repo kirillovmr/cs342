@@ -414,96 +414,94 @@ public class ThreeCardPokerGame extends Application {
 		int timeToPlaceFakeChips = 100;
 		Timeline placeCopyChips = new Timeline(new KeyFrame(Duration.millis(timeToPlaceFakeChips * 2), event -> {
 			for(byte i=0; i<4; i++) {
-				TranslateTransition translate = new TranslateTransition();
-				translate.setDuration(Duration.millis(timeToPlaceFakeChips));
-				translate.setNode(chipsCopy.get(i));
+				TranslateTransition translateToActual = new TranslateTransition();
+				translateToActual.setDuration(Duration.millis(timeToPlaceFakeChips));
+				translateToActual.setNode(chipsCopy.get(i));
 				switch (i) {
 					case 0:
-						translate.setByX(x1);
-						translate.setByY(y1);
+						translateToActual.setByX(x1);
+						translateToActual.setByY(y1);
 						break;
 					case 1:
-						translate.setByX(-x1);
-						translate.setByY(y1);
+						translateToActual.setByX(-x1);
+						translateToActual.setByY(y1);
 						break;
 					case 2:
-						translate.setByX(x2);
-						translate.setByY(y2);
+						translateToActual.setByX(x2);
+						translateToActual.setByY(y2);
 						break;
 					case 3:
-						translate.setByX(-x2);
-						translate.setByY(y2);
+						translateToActual.setByX(-x2);
+						translateToActual.setByY(y2);
 						break;
 				}
 
 				// If moving the last chip
-//				if (i == 3) {
-//					translate.setOnFinished();
-//				}
-				translate.play();
+				if (i == 3) {
+					translateToActual.setOnFinished(afterPlacingChips -> {
+						Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(timeToPlaceFakeChips + 500)));
+
+						smallDelay.setOnFinished(afterSmallDelay -> {
+							int timeToTranslateOneChip = 100;
+							TranslateTransition translateToActual1 = new TranslateTransition();
+							translateToActual1.setDuration(Duration.millis(timeToTranslateOneChip));
+							Timeline moveToCenter = new Timeline(new KeyFrame(Duration.millis(timeToTranslateOneChip * 2), new EventHandler<ActionEvent>() {
+								int i = 0;
+								public void handle(ActionEvent event) {
+									// Making actual chips invisible
+									for (byte j=0; j<5; j++)
+										uiChips.get(i).get(j).setVisible(false);
+
+									// Caching the node
+									chipsCopy.get(i).setCache(true);
+									chipsCopy.get(i).setCacheShape(true);
+									chipsCopy.get(i).setCacheHint(CacheHint.SPEED);
+
+									// Moving chips to the center
+									translateToActual1.setNode(chipsCopy.get(i));
+									switch (i) {
+										case 0:
+											translateToActual1.setByX(-x1 -20);
+											translateToActual1.setByY(-y1 -20);
+											break;
+										case 1:
+											translateToActual1.setByX(x1 +20);
+											translateToActual1.setByY(-y1 -20);
+											break;
+										case 2:
+											translateToActual1.setByX(-x2 -20);
+											translateToActual1.setByY(-y2 +20);
+											break;
+										case 3:
+											translateToActual1.setByX(x2 +20);
+											translateToActual1.setByY(-y2 +20);
+											break;
+									}
+
+									// If moving the last chip
+									if (i == 3) {
+										translateToActual1.setOnFinished(e -> {
+											Timeline smallDelay2 = new Timeline(new KeyFrame(Duration.millis(timeToTranslateOneChip + 500)));
+											smallDelay2.setOnFinished(onFinish);
+											smallDelay2.play();
+										});
+									}
+									translateToActual1.play();
+
+									// Making copy chips visible
+									fakeChips.getChildren().get(i).setVisible(true);
+									i += 1;
+								}
+							}));
+							moveToCenter.setCycleCount(4);
+							moveToCenter.play();
+						});
+						smallDelay.play();
+					});
+				}
+				translateToActual.play();
 			}
 		}));
-
-		placeCopyChips.setOnFinished(afterPlacingChips -> {
-			Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(timeToPlaceFakeChips + 500)));
-
-			smallDelay.setOnFinished(afterSmallDelay -> {
-				int timeToTranslateOneChip = 100;
-				TranslateTransition translate1 = new TranslateTransition();
-				translate1.setDuration(Duration.millis(timeToTranslateOneChip));
-				Timeline moveToCenter = new Timeline(new KeyFrame(Duration.millis(timeToTranslateOneChip * 2), new EventHandler<ActionEvent>() {
-					int i = 0;
-					public void handle(ActionEvent event) {
-						// Making actual chips invisible
-						for (byte j=0; j<5; j++)
-							uiChips.get(i).get(j).setVisible(false);
-
-						// Caching the node
-						chipsCopy.get(i).setCache(true);
-						chipsCopy.get(i).setCacheShape(true);
-						chipsCopy.get(i).setCacheHint(CacheHint.SPEED);
-
-						// Moving chips to the center
-						translate1.setNode(chipsCopy.get(i));
-						switch (i) {
-							case 0:
-								translate1.setByX(-x1 -20);
-								translate1.setByY(-y1 -20);
-								break;
-							case 1:
-								translate1.setByX(x1 +20);
-								translate1.setByY(-y1 -20);
-								break;
-							case 2:
-								translate1.setByX(-x2 -20);
-								translate1.setByY(-y2 +20);
-								break;
-							case 3:
-								translate1.setByX(x2 +20);
-								translate1.setByY(-y2 +20);
-								break;
-						}
-
-						// If moving the last chip
-						if (i == 3) {
-							translate1.setOnFinished(e -> {
-								Timeline smallDelay2 = new Timeline(new KeyFrame(Duration.millis(timeToTranslateOneChip + 500)));
-								smallDelay2.setOnFinished(onFinish);
-								smallDelay2.play();
-							});
-						}
-						translate1.play();
-
-						// Making copy chips visible
-						fakeChips.getChildren().get(i).setVisible(true);
-						i += 1;
-					}
-				}));
-				moveToCenter.setCycleCount(4);
-				moveToCenter.play();
-			});
-			smallDelay.play();
-		});
 		placeCopyChips.play();
 
 		fakeChips.setDisable(true);

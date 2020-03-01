@@ -1,9 +1,11 @@
 import UI.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.scene.CacheHint;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -26,9 +28,16 @@ public class ThreeCardPokerGame extends Application {
 	ArrayList<UITextField> uiInputs; // [0],[1] - Pair plus, [2],[3] - Ante
 	ArrayList<Button> uiButtons; // [0],[1] - Play, Fold P1, [2] - Deal, [3],[4] - Play, Fold P2
 	ArrayList< ArrayList<UICard> > uiCards; // [0] is a dealer, [1],[2] are cards of players 1 and 2 respectively
+	ArrayList<ArrayList<ImageView>> uiChips;
+
+	Timeline showWarningText;
+	Text warningText;
+
+	StackPane rootStack;
+	StackPane fakeChips;
 
 	EventHandler<ActionEvent> startBtnHandler, dealBtnHandler;
-	MyHandler onBetChange;
+	MyHandler onBetChange, onWrongBetInput;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -51,27 +60,36 @@ public class ThreeCardPokerGame extends Application {
 		for (byte i=0; i<3; i++)
 			uiCards.add(new ArrayList<>());
 
-		// Creating UI.UI
-//		ToolBar toolbar = UI.createToolbar();
-		ImageView dealer = UI.createDealerImage();
-		StackPane table = UI_Table.createTable(uiCards, uiInputs);
-		HBox playButtons = UI.createGameButtons(uiButtons);
-//		HBox moneyBox = UI.createMoneyBox(uiText);
+		uiChips = new ArrayList<>();
+		for (byte i=0; i<4; i++)
+			uiChips.add(new ArrayList<>());
 
+		warningText = new Text();
+
+		// Preparing game to start
+		this.gameToInitialState();
+
+		// Main Vertical Box
+		VBox root = new VBox(
+				new UIDealer(),
+				new UITable(uiCards, uiInputs, uiChips, warningText),
+				UIMisc.spacer(30),
+				new UIGameButtons(uiButtons)
+		);
+		root.setId("sceneVBox");
+
+		// Creating and applying handlers
 		this.createEventHandlers();
 		this.setEventHandlers();
 
-		// Setting up UI.UI elements
-		this.gameToInitialState();
+		rootStack = new StackPane(root);
 
-		VBox root = new VBox(UI.spacer(30), dealer, table, playButtons);
-		root.setId("sceneVBox");
-
-		Scene scene = new Scene(root, GameConstants.globalWidth, GameConstants.globalHeight);
+		Scene scene = new Scene(rootStack, GameConstants.globalWidth, GameConstants.globalHeight);
 		scene.getStylesheets().add("ThreeCardPokerGame.css");
 
 		stage.setScene(scene);
 		stage.setTitle("Three Card Poker");
+		stage.setResizable(false);
 		stage.show();
 	}
 
@@ -106,16 +124,19 @@ public class ThreeCardPokerGame extends Application {
 			assignHandToUICards(playerTwo.getHand(), uiCards.get(2));
 			assignHandToUICards(theDealer.getHand(), uiCards.get(0));
 
-			// Showing cards to players
-			uiCards.get(1).get(0).flip(e1 -> uiCards.get(1).get(1).flip(e2 -> uiCards.get(1).get(2).flip(e3 -> {
-				uiCards.get(2).get(0).flip(e4 -> uiCards.get(2).get(1).flip(e5 -> uiCards.get(2).get(2).flip(onFinish -> {
-					// Enabling Start and Fold buttons
-					uiButtons.get(0).setDisable(false);
-					uiButtons.get(1).setDisable(false);
-					uiButtons.get(3).setDisable(false);
-					uiButtons.get(4).setDisable(false);
+			// Animating chips
+			animateTranslationOfChips(onFinish -> {
+				// Showing cards to players
+				uiCards.get(1).get(0).flip(e1 -> uiCards.get(1).get(1).flip(e2 -> uiCards.get(1).get(2).flip(e3 -> {
+					uiCards.get(2).get(0).flip(e4 -> uiCards.get(2).get(1).flip(e5 -> uiCards.get(2).get(2).flip(onFinish2 -> {
+						// Enabling Start and Fold buttons
+						uiButtons.get(0).setDisable(false);
+						uiButtons.get(1).setDisable(false);
+						uiButtons.get(3).setDisable(false);
+						uiButtons.get(4).setDisable(false);
+					})));
 				})));
-			})));
+			});
 		};
 
 		// Handler to run whenever players bet value is changed
@@ -125,6 +146,20 @@ public class ThreeCardPokerGame extends Application {
 						&& (playerTwo.getAnteBet() >= GameConstants.minBet && playerTwo.getAnteBet() <= GameConstants.maxBet));
 				uiButtons.get(2).setDisable(!disable);
 			}
+		};
+
+		// Handler to run whenever user enters wrong bet
+		onWrongBetInput = dummy -> {
+			if (warningText.isVisible()) {
+				showWarningText.stop();
+				showWarningText = new Timeline(new KeyFrame(Duration.millis(GameConstants.showWarningTime), e -> warningText.setVisible(false)));
+				showWarningText.play();
+				return;
+			}
+
+			warningText.setVisible(true);
+			showWarningText = new Timeline(new KeyFrame(Duration.millis(GameConstants.showWarningTime), e -> warningText.setVisible(false)));
+			showWarningText.play();
 		};
 	}
 
@@ -136,10 +171,30 @@ public class ThreeCardPokerGame extends Application {
 		}
 
 		// Handlers for input fields
-		uiInputs.get(0).setOnSuccessChange( newValue -> playerOne.setPairPlusBet(newValue) );
-		uiInputs.get(1).setOnSuccessChange( newValue -> playerTwo.setPairPlusBet(newValue) );
-		uiInputs.get(2).setOnSuccessChange( newValue -> playerOne.setAnteBet(newValue) );
-		uiInputs.get(3).setOnSuccessChange( newValue -> playerTwo.setAnteBet(newValue) );
+		uiInputs.get(0).setOnSuccessChange( newValue -> {
+			playerOne.setPairPlusBet(newValue);
+			for(byte i=0; i<5; i++)
+				uiChips.get(0).get(i).setVisible(newValue > i * GameConstants.maxBet / 5);
+		}, onWrongBetInput);
+		uiInputs.get(1).setOnSuccessChange( newValue -> {
+			playerTwo.setPairPlusBet(newValue);
+			for(byte i=0; i<5; i++)
+				uiChips.get(1).get(i).setVisible(newValue > i * GameConstants.maxBet / 5);
+		}, onWrongBetInput);
+		uiInputs.get(2).setOnSuccessChange( newValue -> {
+			playerOne.setAnteBet(newValue);
+			for(byte i=0; i<5; i++)
+				uiChips.get(2).get(i).setVisible(newValue > i * GameConstants.maxBet / 5);
+		}, onWrongBetInput);
+		uiInputs.get(3).setOnSuccessChange( newValue -> {
+			playerTwo.setAnteBet(newValue);
+			for(byte i=0; i<5; i++)
+				uiChips.get(3).get(i).setVisible(newValue > i * GameConstants.maxBet / 5);
+		}, onWrongBetInput);
+		// Firing new events to properly display chips
+		for (byte i=0; i<4; i++)
+			uiInputs.get(i).textProperty().setValue("?");
+
 
 		// Handlers for players bet change
 		playerOne.setOnBetChange( onBetChange );
@@ -201,18 +256,22 @@ public class ThreeCardPokerGame extends Application {
 
 		// If both players made a selection
 		if (state.player1Chosen && state.player2Chosen) {
-			// Open dealer cards
-			uiCards.get(0).get(0).flip(e -> uiCards.get(0).get(1).flip(e2 -> uiCards.get(0).get(2).flip(onFinish -> {
-				// Calculate winner
-				evaluateHands();
+			Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(1000), e -> { }));
+			smallDelay.setOnFinished(afterDelay -> {
+				// Open dealer cards
+				uiCards.get(0).get(0).flip(e -> uiCards.get(0).get(1).flip(e2 -> uiCards.get(0).get(2).flip(onFinish -> {
+					// Calculate winner
+					evaluateHands();
 
-				state.gameStarted = false;
+					state.gameStarted = false;
 
-				// Making deal btn as start btn
-				uiButtons.get(2).setOnAction(startBtnHandler);
-				uiButtons.get(2).setText(GameConstants.startBtnText);
-				uiButtons.get(2).setDisable(false);
-			})));
+					// Making deal btn as start btn
+					uiButtons.get(2).setOnAction(startBtnHandler);
+					uiButtons.get(2).setText(GameConstants.startBtnText);
+					uiButtons.get(2).setDisable(false);
+				})));
+			});
+			smallDelay.play();
 		}
 	}
 
@@ -254,6 +313,136 @@ public class ThreeCardPokerGame extends Application {
 	}
 
 
+	void animateTranslationOfChips(EventHandler<ActionEvent> onFinish) {
+		ArrayList<StackPane> chipsCopy = new ArrayList<>();
+		fakeChips = new StackPane();
+
+		// Duplicating existing chips
+		for(byte i=0; i<4; i++) {
+			StackPane chipStack = new StackPane();
+			for(byte j=0; j<5; j++) {
+				if (uiInputs.get(i).getCurrentValue() > j * 5) {
+					ImageView wagerChip = UIMisc.createImageView(i < 2 ? "chip_black.png" : "chip_red.png", 0.07);
+					wagerChip.getStyleClass().addAll("wagerChip", "shadow");
+
+					StackPane chipWrap = new StackPane(wagerChip);
+					chipWrap.setPadding(new Insets(0, 0, j * 5, 0));
+					chipStack.getChildren().add(chipWrap);
+				}
+			}
+			fakeChips.getChildren().add(chipStack);
+			chipsCopy.add(chipStack);
+		}
+
+		// Making copy chips invisible
+		for(byte i=0; i<4; i++)
+			fakeChips.getChildren().get(i).setVisible(false);
+
+		// Calculating difference between actual chips position and center of the screen
+		int x1 = (int)((uiChips.get(0).get(0).localToScreen(uiChips.get(0).get(0).getBoundsInLocal()).getMinX() -
+				uiChips.get(1).get(0).localToScreen(uiChips.get(1).get(0).getBoundsInLocal()).getMinX()) / 2);
+		int x2 = (int)((uiChips.get(2).get(0).localToScreen(uiChips.get(2).get(0).getBoundsInLocal()).getMinX() -
+				uiChips.get(3).get(0).localToScreen(uiChips.get(3).get(0).getBoundsInLocal()).getMinX()) / 2);
+		int y1 = 13;
+		int y2 = 85;
+
+		// Placing copyChips above actual chips
+		int timeToPlaceFakeChips = 100;
+		Timeline placeCopyChips = new Timeline(new KeyFrame(Duration.millis(timeToPlaceFakeChips * 2), new EventHandler<ActionEvent>() {
+			int i = 0;
+			public void handle(ActionEvent event) {
+				for(byte i=0; i<4; i++) {
+					TranslateTransition translate = new TranslateTransition();
+					translate.setDuration(Duration.millis(timeToPlaceFakeChips));
+					translate.setNode(chipsCopy.get(i));
+					switch (i) {
+						case 0:
+							translate.setByX(x1);
+							translate.setByY(y1);
+							break;
+						case 1:
+							translate.setByX(-x1);
+							translate.setByY(y1);
+							break;
+						case 2:
+							translate.setByX(x2);
+							translate.setByY(y2);
+							break;
+						case 3:
+							translate.setByX(-x2);
+							translate.setByY(y2);
+							break;
+					}
+					translate.play();
+				}
+//				i += 1;
+			}
+		}));
+		placeCopyChips.setCycleCount(1);
+
+		placeCopyChips.setOnFinished(afterPlacingChips -> {
+			Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(timeToPlaceFakeChips + 500), e -> { }));
+
+			smallDelay.setOnFinished(afterSmallDelay -> {
+				int timeToTranslateOneChip = 100;
+				TranslateTransition translate = new TranslateTransition();
+				translate.setDuration(Duration.millis(timeToTranslateOneChip));
+				Timeline moveToCenter = new Timeline(new KeyFrame(Duration.millis(timeToTranslateOneChip * 2), new EventHandler<ActionEvent>() {
+					int i = 0;
+					public void handle(ActionEvent event) {
+						// Making actual chips invisible
+						uiChips.get(i).get(0).getParent().setVisible(false);
+
+						// Caching the node
+						chipsCopy.get(i).setCache(true);
+						chipsCopy.get(i).setCacheShape(true);
+						chipsCopy.get(i).setCacheHint(CacheHint.SPEED);
+
+						// Moving chips to the center
+						translate.setNode(chipsCopy.get(i));
+						switch (i) {
+							case 0:
+								translate.setByX(-x1 -20);
+								translate.setByY(-y1 -20);
+								break;
+							case 1:
+								translate.setByX(x1 +20);
+								translate.setByY(-y1 -20);
+								break;
+							case 2:
+								translate.setByX(-x2 -20);
+								translate.setByY(-y2 +20);
+								break;
+							case 3:
+								translate.setByX(x2 +20);
+								translate.setByY(-y2 +20);
+								break;
+						}
+						translate.play();
+
+						// Making copy chips visible
+						fakeChips.getChildren().get(i).setVisible(true);
+
+						i += 1;
+					}
+				}));
+				moveToCenter.setCycleCount(4);
+				moveToCenter.setOnFinished(e1 -> {
+					Timeline smallDelay2 = new Timeline(new KeyFrame(Duration.millis(timeToTranslateOneChip + 500), e2 -> { }));
+					smallDelay2.setOnFinished(onFinish);
+					smallDelay2.play();
+				});
+				moveToCenter.play();
+			});
+			smallDelay.play();
+		});
+		placeCopyChips.play();
+
+		fakeChips.setDisable(true);
+		rootStack.getChildren().add(fakeChips);
+	}
+
+
 	// Restoring game to initial state after playing
 	void gameToInitialState() {
 		// Restoring cards size
@@ -288,6 +477,17 @@ public class ThreeCardPokerGame extends Application {
 			})).play();
 		});
 		timeline.play();
+
+		try {
+			// Making actual chips visible
+			for(byte i=0; i<4; i++) {
+				uiChips.get(i).get(0).getParent().setVisible(true);
+				uiInputs.get(i).textProperty().setValue("?");
+			}
+
+			// Deleting fake chips node
+			rootStack.getChildren().remove(fakeChips);
+		} catch (Exception e) {}
 	}
 
 }

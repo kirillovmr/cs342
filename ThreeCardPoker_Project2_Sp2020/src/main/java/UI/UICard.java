@@ -7,7 +7,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
 
 
 public class UICard extends ImageView {
@@ -94,5 +97,18 @@ public class UICard extends ImageView {
         }));
         finishAnim.setOnFinished(onFinish);
         return finishAnim;
+    }
+
+
+    public static HBox createCardBox(ArrayList<UICard> uiPlayerCards, String idPrefix) {
+        HBox cardBox = new HBox();
+
+        for(byte i=0; i<3; i++) {
+            uiPlayerCards.add(new UICard(idPrefix + i));
+            cardBox.getChildren().add( uiPlayerCards.get(i) );
+        }
+
+        cardBox.getStyleClass().add("cardBox");
+        return cardBox;
     }
 }

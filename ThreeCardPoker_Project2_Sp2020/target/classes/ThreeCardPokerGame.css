@@ -7,8 +7,21 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 0);
 }
 
+.showBorder {
+    -fx-border-color: red;
+    -fx-border-width: 1;
+}
+
+.warningText {
+    -fx-fill: rgb(223, 39, 0);
+    -fx-font-family: "Courier";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+
 #sceneVBox {
-    -fx-spacing: 20;
+    /*-fx-spacing: 0;*/
     -fx-alignment: top-center;
 }
 
@@ -40,6 +53,11 @@
 
     -fx-font-size: 15;
 }
+.inputError {
+    -fx-border-color: rgb(223, 39, 0);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
 .wagerBox {
     -fx-spacing: 25;
     -fx-alignment: center;
@@ -58,7 +76,7 @@
 }
 .dealerCardsBox {
     -fx-alignment: center;
-    -fx-padding: 45, 0, 0, 0;
+    -fx-padding: 35, 0, 0, 0;
 }
 .playersCardsRow {
     -fx-alignment: center;
@@ -66,11 +84,11 @@
 }
 .bottomBox {
     -fx-spacing: 20;
-    -fx-padding: 45, 0, 0, 0;
+    -fx-padding: 35, 0, 0, 0;
 }
 
 .pairPlusRow {
-    -fx-spacing: 240;
+    -fx-spacing: 40;
 }
 .anteRow {
     -fx-spacing: 140;

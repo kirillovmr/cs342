@@ -3,9 +3,10 @@ package UI;
 /*
     Stores all the constants that are used in game
  */
+
 public class GameConstants {
     public final static int globalWidth = 1440;
-    public final static int globalHeight = 980;
+    public final static int globalHeight = 880;
 
     public final static int minBet = 5;
     public final static int maxBet = 25;
@@ -20,4 +21,12 @@ public class GameConstants {
 
     public final static String cardBackFilename = "card_back.png";
     public final static double cardScale = (double)(globalWidth) / 8000;
+
+    public final static String dealerFilename = "dealer.png";
+    public final static double dealerScale = (double)(globalWidth) / 3000;
+
+    public final static int tableWidth = (int)(globalWidth * 0.7);
+    public final static int tableHeight = (int)(980 * 0.55);
+
+    public final static int showWarningTime = 1500;
 }

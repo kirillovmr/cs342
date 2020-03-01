@@ -50,6 +50,17 @@ public class UITable extends StackPane {
         HBox dealerCardsBox = UICard.createCardBox(uiCards.get(0), "dealerCard");
         dealerCardsBox.getStyleClass().add("dealerCardsBox");
 
+        // Chip stacks
+        UIChipStack letfChips = new UIChipStack();
+        letfChips.getStyleClass().add("mainChipStack");
+        VBox leftChipsBox = new VBox(UIMisc.spacer(50), letfChips);
+        UIChipStack rightChips = new UIChipStack();
+        rightChips.setVisible(false);
+
+        // Dealers Row
+        HBox dealerRow = new HBox(leftChipsBox, dealerCardsBox, rightChips);
+        dealerRow.getStyleClass().add("dealerRow");
+
         // Pair Plus Row
         HBox pairPlusRow = createWagerRow("", "PAIR PLUS", "chip_black.png", uiChips.get(0), uiChips.get(1));
         pairPlusRow.getStyleClass().add("pairPlusRow");
@@ -71,7 +82,7 @@ public class UITable extends StackPane {
 
         // BorderPane for everything
         BorderPane pane = new BorderPane();
-        pane.setTop(dealerCardsBox);
+        pane.setTop(dealerRow);
         pane.setBottom(bottomBox);
 
         this.getChildren().addAll(tableBack, tableFront, pane);

@@ -71,12 +71,24 @@
     -fx-font-size: 22;
 }
 
+.chipStackRow {
+    -fx-alignment: center;
+    -fx-spacing: -2;
+}
+.mainChipStack {
+    /*-fx-padding: 35, 0, 0, 0;*/
+}
+
 .cardBox {
     -fx-spacing: 10;
 }
 .dealerCardsBox {
     -fx-alignment: center;
     -fx-padding: 35, 0, 0, 0;
+}
+.dealerRow {
+    -fx-alignment: center;
+    -fx-spacing: 40;
 }
 .playersCardsRow {
     -fx-alignment: center;

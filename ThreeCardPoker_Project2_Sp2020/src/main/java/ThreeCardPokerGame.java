@@ -435,9 +435,11 @@ public class ThreeCardPokerGame extends Application {
 						translate.setByY(y2);
 						break;
 				}
-//				if (i == 3)
-//					translate.setOnFinished();
 
+				// If moving the last chip
+//				if (i == 3) {
+//					translate.setOnFinished();
+//				}
 				translate.play();
 			}
 		}));
@@ -481,20 +483,23 @@ public class ThreeCardPokerGame extends Application {
 								translate1.setByY(-y2 +20);
 								break;
 						}
+
+						// If moving the last chip
+						if (i == 3) {
+							translate1.setOnFinished(e -> {
+								Timeline smallDelay2 = new Timeline(new KeyFrame(Duration.millis(timeToTranslateOneChip + 500)));
+								smallDelay2.setOnFinished(onFinish);
+								smallDelay2.play();
+							});
+						}
 						translate1.play();
 
 						// Making copy chips visible
 						fakeChips.getChildren().get(i).setVisible(true);
-
 						i += 1;
 					}
 				}));
 				moveToCenter.setCycleCount(4);
-				moveToCenter.setOnFinished(e1 -> {
-					Timeline smallDelay2 = new Timeline(new KeyFrame(Duration.millis(timeToTranslateOneChip + 500)));
-					smallDelay2.setOnFinished(onFinish);
-					smallDelay2.play();
-				});
 				moveToCenter.play();
 			});
 			smallDelay.play();

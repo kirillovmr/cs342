@@ -15,14 +15,6 @@ public class Card {
         this.value = value;
     }
 
-    public char getSuit() {
-        return suit;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
     public String toResourceName() {
         return "" + suit + value + ".png";
     }

@@ -85,7 +85,7 @@ public class ThreeCardLogic {
                     int newTotalValue = 2 * hand.get(i).value;
 
                     // If new pair is better then the previous one
-                    totalValue = newTotalValue > totalValue ? newTotalValue : totalValue;
+                    totalValue = Math.max(newTotalValue, totalValue);
                 }
             }
         }
@@ -150,7 +150,7 @@ public class ThreeCardLogic {
             case 2: return 30 * bet;
             case 3: return 6 * bet;
             case 4: return 3 * bet;
-            case 5: return 1 * bet;
+            case 5: return bet;
             default: return 0;
         }
     }

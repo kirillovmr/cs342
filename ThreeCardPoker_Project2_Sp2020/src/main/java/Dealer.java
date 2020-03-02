@@ -17,7 +17,7 @@ public class Dealer {
 
     Dealer() {
         theDeck = new Deck();
-        dealersHand = new ArrayList<Card>();
+        dealersHand = new ArrayList<>();
     }
 
     public ArrayList<Card> dealHand() {
@@ -36,7 +36,7 @@ public class Dealer {
             theDeck.remove(0);
         }
 
-        return new ArrayList<Card>(dealersHand);
+        return new ArrayList<>(dealersHand);
     }
 
     public ArrayList<Card> getHand() {

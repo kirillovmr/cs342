@@ -8,10 +8,10 @@ import javafx.scene.layout.VBox;
 
 public class UIChipStack extends VBox {
 
-    private final int spaceBetweenChipBoxes = 10;
-
     public UIChipStack() {
         super();
+
+        int spaceBetweenChipBoxes = 10;
 
         StackPane chips11 = new StackPane();
         for(int i=0; i<11; i++)

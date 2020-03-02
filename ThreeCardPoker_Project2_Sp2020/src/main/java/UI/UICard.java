@@ -30,10 +30,6 @@ public class UICard extends ImageView {
         frontImage = null;
     }
 
-    public UICard(Image image) {
-        super(image);
-    }
-
     public void flip(EventHandler<ActionEvent> onFinish) {
         Timeline finishAnim = getFinishAnimation(onFinish);
         if (animating)
@@ -92,9 +88,7 @@ public class UICard extends ImageView {
     }
 
     private Timeline getFinishAnimation(EventHandler<ActionEvent> onFinish) {
-        Timeline finishAnim = new Timeline(new KeyFrame(Duration.millis(GameConstants.cardFlipAnimationTime), event -> {
-            animating = false;
-        }));
+        Timeline finishAnim = new Timeline(new KeyFrame(Duration.millis(GameConstants.cardFlipAnimationTime), event -> animating = false));
         finishAnim.setOnFinished(onFinish);
         return finishAnim;
     }

@@ -19,7 +19,7 @@ public class Player {
     private MyHandler onBetChange = (dummy) -> {};
 
     Player() {
-        hand = new ArrayList<Card>();
+        hand = new ArrayList<>();
         anteBet = playBet = pairPlusBet = totalWinnings = 0;
     }
 
@@ -40,17 +40,9 @@ public class Player {
         onBetChange.run(0);
     }
 
-    public int getPlayBet() {
-        return playBet;
-    }
-
     public void setPlayBet(int playBet) {
         this.playBet = playBet;
         onBetChange.run(0);
-    }
-
-    public int getPairPlusBet() {
-        return pairPlusBet;
     }
 
     public void setPairPlusBet(int pairPlusBet) {

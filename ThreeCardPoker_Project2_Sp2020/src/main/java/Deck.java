@@ -10,7 +10,7 @@ import java.util.Collections;
 
 public class Deck extends ArrayList<Card> {
 
-    private char suits[] = {'C', 'D', 'S', 'H'};
+    private char[] suits = {'C', 'D', 'S', 'H'};
 
     Deck() {
         newDeck();

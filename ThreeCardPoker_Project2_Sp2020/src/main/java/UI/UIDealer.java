@@ -34,6 +34,7 @@ public class UIDealer extends StackPane {
         Image dealerImage = UIMisc.createImage(GameConstants.dealerFilename);
 
         dealerView = new ImageView(dealerImage);
+        assert dealerImage != null;
         dealerView.setFitWidth(dealerImage.getWidth() * GameConstants.dealerScale);
         dealerView.setFitHeight(dealerImage.getHeight() * GameConstants.dealerScale);
         dealerView.getStyleClass().addAll("dealerImage");

@@ -376,7 +376,7 @@ public class ThreeCardPokerGame extends Application {
 		}
 	}
 
-
+	// Imitates translation of the chips to the center of the screen
 	void animateTranslationOfChips(EventHandler<ActionEvent> onFinish) {
 		chipsCopy = new ArrayList<>();
 		fakeChips = new StackPane();
@@ -452,13 +452,15 @@ public class ThreeCardPokerGame extends Application {
 									for (byte j=0; j<5; j++)
 										uiChips.get(i).get(j).setVisible(false);
 
+									StackPane chipsToWorkWith = chipsCopy.get(i);
+
 									// Caching the node
-									chipsCopy.get(i).setCache(true);
-									chipsCopy.get(i).setCacheShape(true);
-									chipsCopy.get(i).setCacheHint(CacheHint.SPEED);
+									chipsToWorkWith.setCache(true);
+									chipsToWorkWith.setCacheShape(true);
+									chipsToWorkWith.setCacheHint(CacheHint.SPEED);
 
 									// Moving chips to the center
-									translateToActual1.setNode(chipsCopy.get(i));
+									translateToActual1.setNode(chipsToWorkWith);
 									switch (i) {
 										case 0:
 											translateToActual1.setByX(-x1 -20);
@@ -554,7 +556,7 @@ public class ThreeCardPokerGame extends Application {
 
 			// Deleting fake chips node
 			rootStack.getChildren().remove(fakeChips);
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
 	}
 
 }

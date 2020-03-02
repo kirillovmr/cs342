@@ -67,7 +67,7 @@
 }
 .wagerRowText {
     -fx-fill: rgb(39, 39, 39);
-    -fx-font-family: "Andale Mono";
+    -fx-font-family: "Courier";
     -fx-font-size: 22;
 }
 
@@ -90,12 +90,26 @@
     -fx-alignment: center;
     -fx-spacing: 40;
 }
+.textRow {
+    -fx-alignment: center;
+}
+.textGreen {
+    -fx-fill: rgb(46, 204, 113);
+}
+.textWhite {
+    -fx-fill: rgb(205, 205, 205);
+}
+.uiText {
+    -fx-font-family: "Courier";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
 .playersCardsRow {
     -fx-alignment: center;
     -fx-spacing: 60;
 }
 .bottomBox {
-    -fx-spacing: 20;
+    -fx-spacing: 10;
     -fx-padding: 35, 0, 0, 0;
 }
 

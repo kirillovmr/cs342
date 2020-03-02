@@ -26,7 +26,7 @@ public class GameConstants {
     public final static double dealerScale = (double)(globalWidth) / 3000;
 
     public final static int tableWidth = (int)(globalWidth * 0.7);
-    public final static int tableHeight = (int)(980 * 0.55);
+    public final static int tableHeight = (int)(980 * 0.56);
 
     public final static int showWarningTime = 1500;
 }

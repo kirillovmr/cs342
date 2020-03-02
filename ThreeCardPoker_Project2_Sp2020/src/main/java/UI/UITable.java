@@ -21,6 +21,9 @@ public class UITable extends StackPane {
     ArrayList<ArrayList<ImageView>> uiChips;
     Text warningText;
 
+    public UITextRow playersCardText;
+    public UITextRow infoText;
+
     public UITable(ArrayList<ArrayList<UICard>> uiCards, ArrayList<UITextField> uiInputs, ArrayList<ArrayList<ImageView>> uiChips, Text warningText) {
         super();
 
@@ -57,6 +60,10 @@ public class UITable extends StackPane {
         UIChipStack rightChips = new UIChipStack();
         rightChips.setVisible(false);
 
+        // Info Text Row
+        infoText = new UITextRow("textWhite", 350);
+        VBox infoTextBox = new VBox(UIMisc.spacer(20), infoText);
+
         // Dealers Row
         HBox dealerRow = new HBox(leftChipsBox, dealerCardsBox, rightChips);
         dealerRow.getStyleClass().add("dealerRow");
@@ -69,6 +76,9 @@ public class UITable extends StackPane {
         HBox anteRow = createWagerRow(initInputValue, "ANTE WAGER", "chip_red.png", uiChips.get(2), uiChips.get(3));
         anteRow.getStyleClass().add("anteRow");
 
+        // Card Text Row
+        playersCardText = new UITextRow("textGreen", 250);
+
         // Players Cards Row
         HBox playersCardsRow = new HBox(
                 UICard.createCardBox(uiCards.get(1), "player1Card"),
@@ -77,12 +87,13 @@ public class UITable extends StackPane {
         playersCardsRow.getStyleClass().add("playersCardsRow");
 
         // Bottom Box
-        VBox bottomBox = new VBox(pairPlusRow, anteRow, playersCardsRow);
+        VBox bottomBox = new VBox(pairPlusRow, anteRow, playersCardText, playersCardsRow);
         bottomBox.getStyleClass().add("bottomBox");
 
         // BorderPane for everything
         BorderPane pane = new BorderPane();
         pane.setTop(dealerRow);
+        pane.setCenter(infoTextBox);
         pane.setBottom(bottomBox);
 
         this.getChildren().addAll(tableBack, tableFront, pane);

@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ThreeCardPokerGame extends Application {
 
@@ -28,6 +29,8 @@ public class ThreeCardPokerGame extends Application {
 	ArrayList<Button> uiButtons; // [0],[1] - Play, Fold P1, [2] - Deal, [3],[4] - Play, Fold P2
 	ArrayList< ArrayList<UICard> > uiCards; // [0] is a dealer, [1],[2] are cards of players 1 and 2 respectively
 	ArrayList<ArrayList<ImageView>> uiChips;
+
+	UITable uiTable;
 
 	Timeline showWarningText;
 	Text warningText;
@@ -69,10 +72,12 @@ public class ThreeCardPokerGame extends Application {
 		// Preparing game to start
 		this.gameToInitialState();
 
+		uiTable = new UITable(uiCards, uiInputs, uiChips, warningText);
+
 		// Main Vertical Box
 		VBox root = new VBox(
 				new UIDealer(),
-				new UITable(uiCards, uiInputs, uiChips, warningText),
+				uiTable,
 				UIMisc.spacer(30),
 				new UIGameButtons(uiButtons)
 		);
@@ -269,6 +274,10 @@ public class ThreeCardPokerGame extends Application {
 
 		// If both players made a selection
 		if (state.player1Chosen && state.player2Chosen) {
+
+			// Clearing info text
+			uiTable.infoText.clearText();
+
 			Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(1000)));
 			smallDelay.setOnFinished(afterDelay -> {
 				// Open dealer cards
@@ -298,8 +307,8 @@ public class ThreeCardPokerGame extends Application {
 
 
 	void evaluatePairPlus() {
-		int betToStackX = 260, betToPlayerX = 80;
-		int betToStackY = 130, betToPlayerY = 20;
+		int betToStackX = 245, betToPlayerX = 80;
+		int betToStackY = 92, betToPlayerY = 20;
 		int time = 100;
 
 		int p1Res = ThreeCardLogic.evalHand(playerOne.getHand());
@@ -307,13 +316,20 @@ public class ThreeCardPokerGame extends Application {
 		int p2Res = ThreeCardLogic.evalHand(playerTwo.getHand());
 		int p2Win = ThreeCardLogic.evalPPWinnings(playerTwo.getHand(), playerTwo.pairPlusBet);
 
+		// Setting card text value
+		uiTable.playersCardText.setPlayerOneText( ThreeCardLogic.evalHandToPairPlusName(p1Res) );
+		uiTable.playersCardText.setPlayerTwoText( ThreeCardLogic.evalHandToPairPlusName(p2Res) );
+
+		AtomicReference<String> p1InfoText = new AtomicReference<>();
+		AtomicReference<String> p2InfoText = new AtomicReference<>();
+
 		// Evaluating player 1
 		if (p1Res == 0) {
-			System.out.println("Player 1 loses Pair Plus bet");
-			UIMisc.shiftChips(chipsCopy.get(0), -betToStackX, -betToStackY, time, e -> chipsCopy.get(0).setVisible(false));
+			p1InfoText.set("Pair Plus wager lost");
+			UIMisc.shiftChips(chipsCopy.get(0), -betToStackX+7, -betToStackY, time, null);
 		}
 		else {
-			System.out.println("Player 1 Pair Plus wins " + p1Win + "$");
+			p1InfoText.set("Pair Plus wins $" + playerOne.pairPlusBet + "x" + ThreeCardLogic.evalHandToPairPlusMultiplier(p1Res) + " = $" + p1Win);
 			UIMisc.duplicateChips(chipsCopy.get(0), 6-p1Res, "chip_black.png");
 			UIMisc.shiftChips(chipsCopy.get(0), -betToPlayerX, betToPlayerY, time, null);
 		}
@@ -322,14 +338,17 @@ public class ThreeCardPokerGame extends Application {
 		Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(time*4)));
 		smallDelay.setOnFinished(onFinish -> {
 			if (p2Res == 0) {
-				System.out.println("Player 2 loses Pair Plus bet");
-				UIMisc.shiftChips(chipsCopy.get(1), -betToStackX, -betToStackY, time, e -> chipsCopy.get(1).setVisible(false));
+				p2InfoText.set("Pair Plus wager lost");
+				UIMisc.shiftChips(chipsCopy.get(1), -betToStackX, -betToStackY, time, null);
 			}
 			else {
-				System.out.println("Player 2 Pair Plus wins " + p2Win + "$");
+				p2InfoText.set("Pair Plus wins $" + playerTwo.pairPlusBet + "x" + ThreeCardLogic.evalHandToPairPlusMultiplier(p2Res) + " = $" + p2Win);
 				UIMisc.duplicateChips(chipsCopy.get(1), 6-p2Res, "chip_black.png");
 				UIMisc.shiftChips(chipsCopy.get(1), betToPlayerX, betToPlayerY, time, null);
 			}
+
+			uiTable.infoText.setPlayerOneText(p1InfoText.get());
+			uiTable.infoText.setPlayerTwoText(p2InfoText.get());
 		});
 		smallDelay.play();
 	}
@@ -337,43 +356,48 @@ public class ThreeCardPokerGame extends Application {
 
 	void evaluateHands() {
 		int anteToPlayerX = 50, anteToDealerX = 0;
-		int anteToPlayerY = 20, anteToDealerY = 100;
+		int anteToPlayerY = 10, anteToDealerY = 100;
 		int time = 100;
+
+		String p1InfoText = "";
 		if (state.player1ChosenPlay) {
 			int res1 = ThreeCardLogic.compareHands(theDealer.getHand(), playerOne.getHand());
 			if (res1 == 1) {
-				System.out.println("P1: dealer wins");
+				p1InfoText = "You lost ante wager";
 				UIMisc.shiftChips(chipsCopy.get(2), anteToDealerX, -anteToDealerY, time, null);
 			} else if (res1 == 2) {
-				System.out.println("P1: player wins");
+				p1InfoText = "You won $" + playerOne.getAnteBet() * 4;
 				UIMisc.duplicateChips(chipsCopy.get(2), 1, "chip_red.png");
 				UIMisc.shiftChips(chipsCopy.get(2), -anteToPlayerX, anteToPlayerY, time, null);
 			} else {
-				System.out.println("P1: NO ONE wins");
+				p1InfoText = "Neither wins";
 				UIMisc.shiftChips(chipsCopy.get(2), -anteToPlayerX, anteToPlayerY, time, null);
 			}
 		} else {
-			System.out.println("P1 loses because of the fold");
+			p1InfoText = "You lose because of the Fold";
 			UIMisc.shiftChips(chipsCopy.get(2), anteToDealerX, -anteToDealerY, time, null);
 		}
+		uiTable.infoText.setPlayerOneText(p1InfoText);
 
+		String p2InfoText = "";
 		if (state.player2ChosenPlay) {
 			int res2 = ThreeCardLogic.compareHands(theDealer.getHand(), playerTwo.getHand());
 			if (res2 == 1) {
-				System.out.println("P2: dealer wins");
+				p2InfoText = "You lost ante wager";
 				UIMisc.shiftChips(chipsCopy.get(3), anteToDealerX, -anteToDealerY, time, null);
 			} else if (res2 == 2) {
-				System.out.println("P2: player wins");
+				p2InfoText = "You won $" + playerTwo.getAnteBet() * 4;
 				UIMisc.duplicateChips(chipsCopy.get(3), 1, "chip_red.png");
 				UIMisc.shiftChips(chipsCopy.get(3), anteToPlayerX, anteToPlayerY, time, null);
 			} else {
-				System.out.println("P2: NO ONE wins");
+				p2InfoText = "Neither wins";
 				UIMisc.shiftChips(chipsCopy.get(3), anteToPlayerX, anteToPlayerY, time, null);
 			}
 		} else {
-			System.out.println("P2 loses because of the fold");
+			p2InfoText = "You lose because of the Fold";
 			UIMisc.shiftChips(chipsCopy.get(3), anteToDealerX, -anteToDealerY, time, null);
 		}
+		uiTable.infoText.setPlayerTwoText(p2InfoText);
 	}
 
 	// Imitates translation of the chips to the center of the screen
@@ -534,6 +558,10 @@ public class ThreeCardPokerGame extends Application {
 				// Restoring input fields
 				for(TextField field : uiInputs)
 					field.setDisable(false);
+
+				// Clearing text values
+				uiTable.infoText.clearText();
+				uiTable.playersCardText.clearText();
 
 				// Restoring buttons
 				uiButtons.get(0).setDisable(true);

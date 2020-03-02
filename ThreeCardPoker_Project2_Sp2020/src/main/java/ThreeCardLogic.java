@@ -155,6 +155,28 @@ public class ThreeCardLogic {
         }
     }
 
+    public static int evalHandToPairPlusMultiplier(int value) {
+        switch (value) {
+            case 1: return 40;
+            case 2: return 30;
+            case 3: return 6;
+            case 4: return 3;
+            case 5: return 1;
+            default: return -1;
+        }
+    }
+
+    public static String evalHandToPairPlusName(int value) {
+        switch (value) {
+            case 1: return "STRAIGHT FLUSH";
+            case 2: return "THREE OF A KIND";
+            case 3: return "STRAIGHT";
+            case 4: return "FLUSH";
+            case 5: return "PAIR";
+            default: return "";
+        }
+    }
+
     // Compare the two hands passed in and return an integer based on which hand won
     public static int compareHands(ArrayList<Card> dealer, ArrayList<Card> player) {
 

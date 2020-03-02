@@ -134,6 +134,13 @@
 .gameBtn:hover {
     -fx-cursor: hand;
 }
+.moneyBtn {
+    -fx-min-width: 120px;
+    -fx-border-color: rgb(138, 141, 156);
+}
+.moneyBtn:hover {
+    -fx-cursor: none;
+}
 .playButton {
     -fx-border-color: rgb(46, 204, 113);
 }

@@ -52,9 +52,6 @@ public class ThreeCardPokerGame extends Application {
 
 		// TODO: When player gets FLUSH but dealer pair, some why player loses
 
-
-		// TODO: Display total winnings
-
 		// Creating elements
 		uiSettings = new UISettings(stage);
 		uiDealer = new UIDealer();
@@ -62,7 +59,7 @@ public class ThreeCardPokerGame extends Application {
 		uiGameButtons = new UIGameButtons();
 
 		// Main Vertical Box
-		VBox root = new VBox( uiSettings, uiDealer, uiTable, UIMisc.spacer(30), uiGameButtons );
+		VBox root = new VBox( uiDealer, uiTable, UIMisc.spacer(30), uiGameButtons );
 		root.setId("sceneVBox");
 
 		// Creating and applying handlers
@@ -73,7 +70,8 @@ public class ThreeCardPokerGame extends Application {
 		this.gameFreshStart();
 		this.gameToInitialState();
 
-		rootStack = new StackPane(root);
+		rootStack = new StackPane(root, uiSettings);
+		uiSettings.setPickOnBounds(false);
 
 		Scene scene = new Scene(rootStack, GameConstants.globalWidth, GameConstants.globalHeight);
 		scene.getStylesheets().add("ThreeCardPokerGame.css");
@@ -374,8 +372,10 @@ public class ThreeCardPokerGame extends Application {
 				UIMisc.shiftChips(chipsCopy.get(1), betToPlayerX, betToPlayerY, time, onFinish);
 			}
 
-			uiTable.infoText.setPlayerOneText(p1InfoText.get());
-			uiTable.infoText.setPlayerTwoText(p2InfoText.get());
+			if (playerOne.getPairPlusBet() > 0)
+				uiTable.infoText.setPlayerOneText(p1InfoText.get());
+			if (playerTwo.getPairPlusBet() > 0)
+				uiTable.infoText.setPlayerTwoText(p2InfoText.get());
 		});
 		smallDelay.play();
 	}

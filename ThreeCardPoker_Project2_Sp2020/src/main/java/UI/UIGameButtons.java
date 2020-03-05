@@ -2,8 +2,10 @@ package UI;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 public class UIGameButtons extends HBox {
 
@@ -36,11 +38,21 @@ public class UIGameButtons extends HBox {
 
     private void createButtonBoxes() {
         // Left side
-        HBox leftButtonsBox = new HBox( playerOneMoneyBtn, UIMisc.leftSpacer(10), p1PlayBtn, p1FoldBtn );
+        HBox leftButtonsBox = new HBox(
+                playerOneMoneyBtn,
+                UIMisc.leftSpacer(10),
+                p1FoldBtn,
+                p1PlayBtn
+        );
         leftButtonsBox.getStyleClass().add("buttonsBox");
 
         // Right side
-        HBox rightButtonsBox = new HBox( p2PlayBtn, p2FoldBtn, UIMisc.leftSpacer(10), playerTwoMoneyBtn );
+        HBox rightButtonsBox = new HBox(
+                p2PlayBtn,
+                p2FoldBtn,
+                UIMisc.leftSpacer(10),
+                playerTwoMoneyBtn
+        );
         rightButtonsBox.getStyleClass().add("buttonsBox");
 
         this.getChildren().addAll(leftButtonsBox, dealPlayBtn, rightButtonsBox);
@@ -50,6 +62,14 @@ public class UIGameButtons extends HBox {
         Button b = new Button(text);
         b.getStyleClass().addAll("gameBtn", "shadow", className);
         b.setId(id);
+
+        // Setting tooltips
+        if (text.equals("Play")) {
+            Tooltip t = new Tooltip("Doubles the Ante Bet");
+            t.setShowDelay(Duration.ZERO);
+            b.setTooltip(t);
+        }
+
         return b;
     }
 

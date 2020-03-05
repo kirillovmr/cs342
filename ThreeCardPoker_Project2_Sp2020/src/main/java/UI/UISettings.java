@@ -53,7 +53,7 @@ public class UISettings extends HBox {
             if (!popup.isShowing()) {
                 Point2D buttonPoint = settingsBtn.localToScene(0, 0);
                 popup.setX(stage.getX() + buttonPoint.getX());
-                popup.setY(stage.getY() + buttonPoint.getY() + settingsBtn.getHeight() + 30);
+                popup.setY(stage.getY() + buttonPoint.getY() + settingsBtn.getHeight() + 35);
                 popup.show(stage);
             }
         });

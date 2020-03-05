@@ -98,7 +98,7 @@ public class UITable extends StackPane {
         rightChips.setVisible(false);
 
         // Info Text Row
-        infoText = new UITextRow("textWhite", 350);
+        infoText = new UITextRow("textWhite", 320);
         VBox infoTextBox = new VBox(UIMisc.spacer(20), infoText);
 
         // Dealers Row

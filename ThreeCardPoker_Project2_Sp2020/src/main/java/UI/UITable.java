@@ -1,5 +1,6 @@
 package UI;
 
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
@@ -14,39 +15,50 @@ import java.util.Objects;
 
 public class UITable extends StackPane {
 
-    final int tableWidth = GameConstants.tableWidth;
-    final int tableHeight = GameConstants.tableHeight;
+    // Dealers / Players cards
+    public ArrayList<UICard> dealersCards, p1Cards, p2Cards;
 
-    final String initInputValue = Integer.toString(GameConstants.minBet);
+    // Warning text in the middle of the table
+    public Timeline showWarningText;
+    public Text warningText;
 
-    ArrayList<ArrayList<UICard>> uiCards;
-    ArrayList<UITextField> uiInputs;
-    ArrayList<ArrayList<ImageView>> uiChips;
-    Text warningText;
+    // Dealing with inputs
+    public ArrayList<UITextField> uiInputs;
+    public ArrayList<ArrayList<ImageView>> uiChips;
 
-    public UITextRow playersCardText;
-    public UITextRow infoText;
+    // Text to display hand value && to display game updates
+    public UITextRow playersCardText, infoText;
 
-    Rectangle tableBack, tableFront;
-    ImagePattern tableBackPattern = new ImagePattern(Objects.requireNonNull(UIMisc.createImage("bg_black.jpg")));
-    ImagePattern tableFrontPattern = new ImagePattern(Objects.requireNonNull(UIMisc.createImage("bg_darkgreen.png")));
+    // Main table elements
+    private Rectangle tableBack, tableFront;
 
-    private boolean showingRawStyle = true;
+    // For style change purposes
+    private boolean showingRawStyle;
+    private ImagePattern tableFrontPattern;
 
-    public UITable(ArrayList<ArrayList<UICard>> uiCards, ArrayList<UITextField> uiInputs, ArrayList<ArrayList<ImageView>> uiChips, Text warningText) {
+    public UITable() {
         super();
 
-        this.uiCards = uiCards;
-        this.uiInputs = uiInputs;
-        this.uiChips = uiChips;
-        this.warningText = warningText;
+        this.dealersCards = new ArrayList<>();
+        this.p1Cards = new ArrayList<>();
+        this.p2Cards = new ArrayList<>();
+
+        this.warningText = new Text();
+
+        this.uiInputs = new ArrayList<>(); // [0],[1] - Pair plus, [2],[3] - Ante;
+        this.uiChips = new ArrayList<>();
+        for (byte i=0; i<4; i++)
+            uiChips.add(new ArrayList<>());
+
+        showingRawStyle = true;
+        tableFrontPattern = new ImagePattern(Objects.requireNonNull(UIMisc.createImage("bg_darkgreen.png")));
 
         createTable();
     }
 
+    // Flips the view of the table
     public void flipView() {
         if (showingRawStyle) {
-//            tableBack.setFill(tableBackPattern);
             tableBack.setFill(Paint.valueOf("#202125"));
             tableFront.setFill(tableFrontPattern);
         }
@@ -58,24 +70,24 @@ public class UITable extends StackPane {
         showingRawStyle = !showingRawStyle;
     }
 
-    public void createTable() {
+    private void createTable() {
         // Back side of the table
-        tableBack = new Rectangle(0, 0, tableWidth, tableHeight);
+        tableBack = new Rectangle(0, 0, GameConstants.tableWidth, GameConstants.tableHeight);
         tableBack.getStyleClass().addAll("tableShadow");
         tableBack.setId("table-back");
-        tableBack.setArcWidth(tableWidth * 0.5);
-        tableBack.setArcHeight(tableHeight);
+        tableBack.setArcWidth(GameConstants.tableWidth * 0.5);
+        tableBack.setArcHeight(GameConstants.tableHeight);
 
         // Front side of the table
-        tableFront = new Rectangle(0, 0, tableWidth * 0.9, tableHeight * 0.9);
+        tableFront = new Rectangle(0, 0, GameConstants.tableWidth * 0.9, GameConstants.tableHeight * 0.9);
         tableFront.getStyleClass().addAll("tableShadow");
         tableFront.setId("table-front");
         tableFront.getStyleClass().addAll("shadow");
-        tableFront.setArcWidth(tableWidth * 0.9 * 0.5);
-        tableFront.setArcHeight(tableHeight * 0.9);
+        tableFront.setArcWidth(GameConstants.tableWidth * 0.9 * 0.5);
+        tableFront.setArcHeight(GameConstants.tableHeight * 0.9);
 
         // Dealers Cards
-        HBox dealerCardsBox = UICard.createCardBox(uiCards.get(0), "dealerCard");
+        HBox dealerCardsBox = UICard.createCardBox(dealersCards, "dealerCard");
         dealerCardsBox.getStyleClass().add("dealerCardsBox");
 
         // Chip stacks
@@ -98,7 +110,7 @@ public class UITable extends StackPane {
         pairPlusRow.getStyleClass().add("pairPlusRow");
 
         // Ante Row
-        HBox anteRow = createWagerRow(initInputValue, "ANTE WAGER", "chip_red.png", uiChips.get(2), uiChips.get(3));
+        HBox anteRow = createWagerRow(Integer.toString(GameConstants.minBet), "ANTE WAGER", "chip_red.png", uiChips.get(2), uiChips.get(3));
         anteRow.getStyleClass().add("anteRow");
 
         // Card Text Row
@@ -106,8 +118,8 @@ public class UITable extends StackPane {
 
         // Players Cards Row
         HBox playersCardsRow = new HBox(
-                UICard.createCardBox(uiCards.get(1), "player1Card"),
-                UICard.createCardBox(uiCards.get(2), "player2Card")
+                UICard.createCardBox(p1Cards, "player1Card"),
+                UICard.createCardBox(p2Cards, "player2Card")
         );
         playersCardsRow.getStyleClass().add("playersCardsRow");
 

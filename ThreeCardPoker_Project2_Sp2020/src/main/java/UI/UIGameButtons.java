@@ -2,65 +2,54 @@ package UI;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-import java.util.ArrayList;
-
 public class UIGameButtons extends HBox {
 
-    ArrayList<Button> uiButtons;
-    Button playerOneMoneyBtn = new Button();
-    Button playerTwoMoneyBtn = new Button();
+    private Button playerOneMoneyBtn;
+    private Button playerTwoMoneyBtn;
+
+    public Button p1PlayBtn, p1FoldBtn;
+    public Button dealPlayBtn;
+    public Button p2PlayBtn, p2FoldBtn;
 
     private String moneyPrefix = "$";
 
-    public UIGameButtons(ArrayList<Button> uiButtons) {
+    public UIGameButtons() {
         super();
-        this.uiButtons = uiButtons;
 
-        createGameButtons();
-        this.getStyleClass().addAll("buttonsRow");
-    }
-
-    public void createGameButtons() {
-        // Left side
         playerOneMoneyBtn = createMoneyButton();
-        HBox leftButtonsBox = new HBox(
-                playerOneMoneyBtn,
-                UIMisc.leftSpacer(10),
-                createButton("Play", "playButton", "btnPlay1"),
-                createButton("Fold", "foldButton", "btnFold1")
-        );
-        leftButtonsBox.getStyleClass().add("buttonsBox");
+        p1PlayBtn = createButton("Play", "playButton", "btnPlay1");
+        p1FoldBtn = createButton("Fold", "foldButton", "btnFold1");
 
-        // Middle button
-        Button dealButton = createButton("Deal", "dealButton", "btnDeal");
+        dealPlayBtn = createButton("Deal", "dealButton", "btnDeal");
 
-        // Right side
+        p2PlayBtn = createButton("Play", "playButton", "btnPlay2");
+        p2FoldBtn = createButton("Fold", "foldButton", "btnFold2");
         playerTwoMoneyBtn = createMoneyButton();
         playerTwoMoneyBtn.setContentDisplay(ContentDisplay.RIGHT);
-        HBox rightButtonsBox = new HBox(
-                createButton("Play", "playButton", "btnPlay2"),
-                createButton("Fold", "foldButton", "btnFold2"),
-                UIMisc.leftSpacer(10),
-                playerTwoMoneyBtn
-        );
+
+        this.getStyleClass().addAll("buttonsRow");
+        createButtonBoxes();
+    }
+
+    private void createButtonBoxes() {
+        // Left side
+        HBox leftButtonsBox = new HBox( playerOneMoneyBtn, UIMisc.leftSpacer(10), p1PlayBtn, p1FoldBtn );
+        leftButtonsBox.getStyleClass().add("buttonsBox");
+
+        // Right side
+        HBox rightButtonsBox = new HBox( p2PlayBtn, p2FoldBtn, UIMisc.leftSpacer(10), playerTwoMoneyBtn );
         rightButtonsBox.getStyleClass().add("buttonsBox");
 
-
-
-        this.getChildren().addAll(leftButtonsBox, dealButton, rightButtonsBox);
+        this.getChildren().addAll(leftButtonsBox, dealPlayBtn, rightButtonsBox);
     }
 
     private Button createButton(String text, String className, String id) {
         Button b = new Button(text);
         b.getStyleClass().addAll("gameBtn", "shadow", className);
         b.setId(id);
-
-        uiButtons.add(b);
         return b;
     }
 

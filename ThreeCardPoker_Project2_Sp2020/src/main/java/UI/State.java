@@ -8,7 +8,7 @@ public class State {
     public boolean player1Chosen;
     public boolean player2Chosen;
 
-    // Was UI.UI updated?
+    // Was UI updated?
     public boolean player1UIUpdated;
     public boolean player2UIUpdated;
 

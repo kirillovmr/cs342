@@ -21,13 +21,14 @@ public class ThreeCardLogic {
 
         for (int i=1; i<hand.size(); i++) {
             // Checking for suit
-            if (hand.get(i).suit != suit)
+            if (hand.get(i).suit != suit) {
                 return 0;
+            }
 
             // Checking for next card to be exactly 1 value less
-            if (hand.get(i).value != hand.get(i-1).value - 1)
+            if (hand.get(i).value != hand.get(i-1).value - 1) {
                 return 0;
-
+            }
         }
         return hand.get(0).value * 3 - 3;
     }
@@ -36,19 +37,23 @@ public class ThreeCardLogic {
     protected static int threeOfAKind(ArrayList<Card> hand) {
         int value = hand.get(0).value;
 
-        for (int i=1; i<hand.size(); i++)
-            if (hand.get(i).value != value)
+        for (int i=1; i<hand.size(); i++) {
+            if (hand.get(i).value != value) {
                 return 0;
+            }
+        }
 
         return value * hand.size();
     }
 
     // Returns the value of Straight
     protected static int straight(ArrayList<Card> hand) {
-        for (int i=1; i<hand.size(); i++)
+        for (int i=1; i<hand.size(); i++) {
             // Checking for next card to be exactly 1 value less
-            if (hand.get(i).value != hand.get(i - 1).value - 1)
+            if (hand.get(i).value != hand.get(i - 1).value - 1) {
                 return 0;
+            }
+        }
 
         return hand.get(0).value * 3 - 3;
     }
@@ -60,9 +65,9 @@ public class ThreeCardLogic {
 
         for (int i=1; i<hand.size(); i++) {
             // Checking for suit
-            if (hand.get(i).suit != suit)
+            if (hand.get(i).suit != suit) {
                 return 0;
-
+            }
             totalValue += hand.get(i).value;
         }
 
@@ -77,8 +82,9 @@ public class ThreeCardLogic {
         for (int i=0; i<hand.size(); i++) {
             for (int j = 0; j < hand.size(); j++) {
                 // Skip is comparing with the same card
-                if (i == j)
+                if (i == j) {
                     continue;
+                }
 
                 // If found a pair
                 if (hand.get(i).value == hand.get(j).value) {
@@ -97,9 +103,11 @@ public class ThreeCardLogic {
     protected static int highCard(ArrayList<Card> hand) {
         int maxValue = hand.get(0).value;
 
-        for (int i=1; i<hand.size(); i++)
-            if (hand.get(i).value > maxValue)
+        for (int i=1; i<hand.size(); i++) {
+            if (hand.get(i).value > maxValue) {
                 maxValue = hand.get(i).value;
+            }
+        }
 
         return  maxValue;
     }

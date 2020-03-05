@@ -1,12 +1,15 @@
-
+/*
+    Main stylesheet for ThreeCardPokerGame
+ */
 .root {
     -fx-background-color: rgb(44, 44, 50);
 }
-
+#sceneVBox {
+    -fx-alignment: top-center;
+}
 .shadow {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 0);
 }
-
 
 /*
     Settings
@@ -18,25 +21,26 @@
 .settingsBtn {
     -fx-min-width: 100;
     -fx-pref-width: 100;
+
+    -fx-border-width: 2;
+    -fx-border-color: #b15e5a;
+    -fx-border-radius: 5;
+
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-background-radius: 5;
+
+    -fx-text-fill: rgb(255, 255, 255);
 }
 .settingsMainBtn {
 
 }
-
 .popupBox {
     -fx-spacing: 10;
 }
 
-
 /*
-
+    Warning text for wrong textField input
  */
-
-.showBorder {
-    -fx-border-color: red;
-    -fx-border-width: 1;
-}
-
 .warningText {
     -fx-fill: rgb(223, 39, 0);
     -fx-font-family: "Courier";
@@ -44,12 +48,16 @@
     -fx-font-weight: bold;
 }
 
+/*
+    Dealer
+ */
+.dealerImage {
 
-#sceneVBox {
-    /*-fx-spacing: 0;*/
-    -fx-alignment: top-center;
 }
 
+/*
+    Table
+ */
 .tableShadow {
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.99), 5, 0, 0, 0);
 }
@@ -62,10 +70,9 @@
     -fx-fill: rgb(87, 90, 102);
 }
 
-.dealerImage {
-
-}
-
+/*
+    Input field
+ */
 .wagerInput {
     -fx-max-width: 60;
     -fx-text-fill: white;
@@ -96,6 +103,9 @@
     -fx-font-size: 22;
 }
 
+/*
+    Chip stack
+ */
 .chipStackRow {
     -fx-alignment: center;
     -fx-spacing: -2;
@@ -104,6 +114,9 @@
     /*-fx-padding: 35, 0, 0, 0;*/
 }
 
+/*
+    Cards - related
+ */
 .cardBox {
     -fx-spacing: 10;
 }
@@ -137,7 +150,6 @@
     -fx-spacing: 10;
     -fx-padding: 35, 0, 0, 0;
 }
-
 .pairPlusRow {
     -fx-spacing: 40;
 }
@@ -145,6 +157,9 @@
     -fx-spacing: 140;
 }
 
+/*
+    Buttons
+ */
 .gameBtn {
     -fx-min-width: 60px;
     -fx-border-width: 1;

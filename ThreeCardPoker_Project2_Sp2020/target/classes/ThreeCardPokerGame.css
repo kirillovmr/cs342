@@ -18,6 +18,15 @@
 .settingsBtn {
     -fx-min-width: 100;
     -fx-pref-width: 100;
+
+    -fx-border-width: 2;
+    -fx-border-color: #b15e5a;
+    -fx-border-radius: 5;
+
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-background-radius: 5;
+
+    -fx-text-fill: rgb(255, 255, 255);
 }
 .settingsMainBtn {
 

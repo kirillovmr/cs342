@@ -137,9 +137,18 @@
 .moneyBtn {
     -fx-min-width: 120px;
     -fx-border-color: rgb(138, 141, 156);
+    /*-fx-border-width: 0 0 3 0;*/
+    -fx-border-width: 0;
+
+    -fx-font-family: "Courier";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
 }
 .moneyBtn:hover {
     -fx-cursor: none;
+}
+.moneyImg {
+    -fx-padding: 10;
 }
 .playButton {
     -fx-border-color: rgb(46, 204, 113);

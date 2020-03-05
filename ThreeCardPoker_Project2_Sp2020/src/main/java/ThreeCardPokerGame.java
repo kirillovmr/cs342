@@ -31,6 +31,7 @@ public class ThreeCardPokerGame extends Application {
 	ArrayList<ArrayList<ImageView>> uiChips;
 
 	UITable uiTable;
+	UIGameButtons gameButtons;
 
 	Timeline showWarningText;
 	Text warningText;
@@ -53,9 +54,6 @@ public class ThreeCardPokerGame extends Application {
 		playerTwo = new Player();
 		theDealer = new Dealer();
 
-		playerOne.setAnteBet(GameConstants.minBet);
-		playerTwo.setAnteBet(GameConstants.minBet);
-
 		uiText = new ArrayList<>();
 		uiInputs = new ArrayList<>();
 		uiButtons = new ArrayList<>();
@@ -69,23 +67,33 @@ public class ThreeCardPokerGame extends Application {
 
 		warningText = new Text();
 
-		// Preparing game to start
-		this.gameToInitialState();
+		// TODO: When player gets FLUSH but dealer pair, somewhy player loses
 
+		// Creating elements
 		uiTable = new UITable(uiCards, uiInputs, uiChips, warningText);
+		gameButtons = new UIGameButtons(uiButtons);
 
 		// Main Vertical Box
 		VBox root = new VBox(
 				new UIDealer(),
 				uiTable,
 				UIMisc.spacer(30),
-				new UIGameButtons(uiButtons)
+				gameButtons
 		);
 		root.setId("sceneVBox");
 
 		// Creating and applying handlers
 		this.createEventHandlers();
 		this.setEventHandlers();
+
+		// Preparing game to start
+		this.gameToInitialState();
+
+		// Setting up players
+		playerOne.setBalance(GameConstants.initialMoneyValue);
+		playerTwo.setBalance(GameConstants.initialMoneyValue);
+		playerOne.setAnteBet(GameConstants.minBet);
+		playerTwo.setAnteBet(GameConstants.minBet);
 
 		rootStack = new StackPane(root);
 
@@ -119,6 +127,10 @@ public class ThreeCardPokerGame extends Application {
 			// Disable Deal button
 			uiButtons.get(2).setDisable(true);
 
+			// Updating players balance
+			playerOne.setBalance( playerOne.getBalance() - playerOne.getAnteBet() - playerOne.getPairPlusBet() );
+			playerTwo.setBalance( playerTwo.getBalance() - playerTwo.getAnteBet() - playerTwo.getPairPlusBet());
+
 			// Dealing hand
 			playerOne.setHand(theDealer.dealHand());
 			playerTwo.setHand(theDealer.dealHand());
@@ -141,7 +153,7 @@ public class ThreeCardPokerGame extends Application {
 						uiButtons.get(4).setDisable(false);
 
 						// Evaluating Pair Plus bet
-						evaluatePairPlus();
+						evaluatePairPlus(e -> disablePlayButtonsIfNotEnoughMoney());
 					})));
 				})));
 			});
@@ -150,9 +162,24 @@ public class ThreeCardPokerGame extends Application {
 		// Handler to run whenever players bet value is changed
 		onBetChange = dummy -> {
 			if (!state.gameStarted) {
-				boolean disable = ((playerOne.getAnteBet() >= GameConstants.minBet && playerOne.getAnteBet() <= GameConstants.maxBet)
-						&& (playerTwo.getAnteBet() >= GameConstants.minBet && playerTwo.getAnteBet() <= GameConstants.maxBet));
-				uiButtons.get(2).setDisable(!disable);
+				// Disabling deal button if the ante bet is not in range
+				boolean disableByAnte = (
+					playerOne.getAnteBet() < GameConstants.minBet || playerOne.getAnteBet() > GameConstants.maxBet ||
+					playerTwo.getAnteBet() < GameConstants.minBet || playerTwo.getAnteBet() > GameConstants.maxBet
+				);
+
+				// Disabling deal button if the ante bet is not in range
+				boolean disableByPairPlus = (
+					((playerOne.getPairPlusBet() < GameConstants.minBet || playerOne.getPairPlusBet() > GameConstants.maxBet) && playerOne.getPairPlusBet() != 0) ||
+					((playerTwo.getPairPlusBet() < GameConstants.minBet || playerTwo.getPairPlusBet() > GameConstants.maxBet) && playerTwo.getPairPlusBet() != 0)
+				);
+
+				// Disabling deal button if total bet > balance
+				boolean disableByBalance = (
+					(playerOne.getBalance() - playerOne.getAnteBet() - playerOne.getPairPlusBet()) < 0 ||
+					(playerTwo.getBalance() - playerTwo.getAnteBet() - playerTwo.getPairPlusBet()) < 0
+				);
+				uiButtons.get(2).setDisable(disableByAnte || disableByPairPlus || disableByBalance);
 			}
 		};
 
@@ -203,6 +230,9 @@ public class ThreeCardPokerGame extends Application {
 		for (byte i=0; i<4; i++)
 			uiInputs.get(i).textProperty().setValue("?");
 
+		// Handlers for player balance change
+		playerOne.setOnBalanceChange( newBalance -> gameButtons.setPlayerOneMoney(newBalance) );
+		playerTwo.setOnBalanceChange( newBalance -> gameButtons.setPlayerTwoMoney(newBalance) );
 
 		// Handlers for players bet change
 		playerOne.setOnBetChange( onBetChange );
@@ -241,6 +271,9 @@ public class ThreeCardPokerGame extends Application {
 			if (state.player1ChosenPlay) {
 				// Displaying 2x more chips in bet
 				UIMisc.duplicateChips(chipsCopy.get(2), 1, "chip_red.png");
+
+				// Updating players balance
+				playerOne.setBalance( playerOne.getBalance() - playerOne.getAnteBet() );
 			}
 			else {
 				// Scaling cards if Fold
@@ -259,6 +292,9 @@ public class ThreeCardPokerGame extends Application {
 			if (state.player2ChosenPlay) {
 				// Displaying 2x more chips in bet
 				UIMisc.duplicateChips(chipsCopy.get(3), 1, "chip_red.png");
+
+				// Updating players balance
+				playerTwo.setBalance( playerTwo.getBalance() - playerTwo.getAnteBet() );
 			}
 			else {
 				// Scaling cards if fold
@@ -306,7 +342,16 @@ public class ThreeCardPokerGame extends Application {
 	}
 
 
-	void evaluatePairPlus() {
+	void disablePlayButtonsIfNotEnoughMoney(){
+		if (playerOne.getBalance() - playerOne.getAnteBet() < 0)
+			uiButtons.get(0).setDisable(true);
+
+		if (playerTwo.getBalance() - playerTwo.getAnteBet() < 0)
+			uiButtons.get(3).setDisable(true);
+	}
+
+
+	void evaluatePairPlus(EventHandler<ActionEvent> onFinish) {
 		int betToStackX = 245, betToPlayerX = 80;
 		int betToStackY = 92, betToPlayerY = 20;
 		int time = 100;
@@ -330,21 +375,23 @@ public class ThreeCardPokerGame extends Application {
 		}
 		else {
 			p1InfoText.set("Pair Plus wins $" + playerOne.pairPlusBet + "x" + ThreeCardLogic.evalHandToPairPlusMultiplier(p1Res) + " = $" + p1Win);
-			UIMisc.duplicateChips(chipsCopy.get(0), 6-p1Res, "chip_black.png");
+			playerOne.setBalance( playerOne.getBalance() + p1Win );
+			UIMisc.duplicateChips(chipsCopy.get(0), 5-p1Res, "chip_black.png");
 			UIMisc.shiftChips(chipsCopy.get(0), -betToPlayerX, betToPlayerY, time, null);
 		}
 
 		// Evaluating player 2
 		Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(time*4)));
-		smallDelay.setOnFinished(onFinish -> {
+		smallDelay.setOnFinished(event -> {
 			if (p2Res == 0) {
 				p2InfoText.set("Pair Plus wager lost");
-				UIMisc.shiftChips(chipsCopy.get(1), -betToStackX, -betToStackY, time, null);
+				UIMisc.shiftChips(chipsCopy.get(1), -betToStackX, -betToStackY, time, onFinish);
 			}
 			else {
 				p2InfoText.set("Pair Plus wins $" + playerTwo.pairPlusBet + "x" + ThreeCardLogic.evalHandToPairPlusMultiplier(p2Res) + " = $" + p2Win);
-				UIMisc.duplicateChips(chipsCopy.get(1), 6-p2Res, "chip_black.png");
-				UIMisc.shiftChips(chipsCopy.get(1), betToPlayerX, betToPlayerY, time, null);
+				playerTwo.setBalance( playerTwo.getBalance() + p2Win );
+				UIMisc.duplicateChips(chipsCopy.get(1), 5-p2Res, "chip_black.png");
+				UIMisc.shiftChips(chipsCopy.get(1), betToPlayerX, betToPlayerY, time, onFinish);
 			}
 
 			uiTable.infoText.setPlayerOneText(p1InfoText.get());
@@ -366,11 +413,13 @@ public class ThreeCardPokerGame extends Application {
 				p1InfoText = "You lost ante wager";
 				UIMisc.shiftChips(chipsCopy.get(2), anteToDealerX, -anteToDealerY, time, null);
 			} else if (res1 == 2) {
-				p1InfoText = "You won $" + playerOne.getAnteBet() * 4;
+				p1InfoText = "You won $" + 4 * playerOne.getAnteBet();
+				playerOne.setBalance( playerOne.getBalance() + 4 * playerOne.getAnteBet() );
 				UIMisc.duplicateChips(chipsCopy.get(2), 1, "chip_red.png");
 				UIMisc.shiftChips(chipsCopy.get(2), -anteToPlayerX, anteToPlayerY, time, null);
 			} else {
 				p1InfoText = "Neither wins";
+				playerOne.setBalance( playerOne.getBalance() + 2 * playerOne.getAnteBet() );
 				UIMisc.shiftChips(chipsCopy.get(2), -anteToPlayerX, anteToPlayerY, time, null);
 			}
 		} else {
@@ -386,11 +435,13 @@ public class ThreeCardPokerGame extends Application {
 				p2InfoText = "You lost ante wager";
 				UIMisc.shiftChips(chipsCopy.get(3), anteToDealerX, -anteToDealerY, time, null);
 			} else if (res2 == 2) {
-				p2InfoText = "You won $" + playerTwo.getAnteBet() * 4;
+				p2InfoText = "You won $" + 4 * playerTwo.getAnteBet();
+				playerTwo.setBalance( playerTwo.getBalance() + 4 * playerTwo.getAnteBet() );
 				UIMisc.duplicateChips(chipsCopy.get(3), 1, "chip_red.png");
 				UIMisc.shiftChips(chipsCopy.get(3), anteToPlayerX, anteToPlayerY, time, null);
 			} else {
 				p2InfoText = "Neither wins";
+				playerTwo.setBalance( playerTwo.getBalance() + 2 * playerTwo.getAnteBet() );
 				UIMisc.shiftChips(chipsCopy.get(3), anteToPlayerX, anteToPlayerY, time, null);
 			}
 		} else {
@@ -537,6 +588,11 @@ public class ThreeCardPokerGame extends Application {
 
 	// Restoring game to initial state after playing
 	void gameToInitialState() {
+
+		// Clearing text values
+		uiTable.infoText.clearText();
+		uiTable.playersCardText.clearText();
+
 		// Restoring cards size
 		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(GameConstants.cardScaleAnimationTime), ev -> {
 			for(UICard card: uiCards.get(1))
@@ -552,24 +608,28 @@ public class ThreeCardPokerGame extends Application {
 					for (UICard card : arr)
 						card.flip(null);
 
-				// Restoring state
-				state.init();
+				// Delay to make sure cards are closed
+				Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(GameConstants.cardFlipAnimationTime * 2)));
+				smallDelay.setOnFinished(onFinish -> {
 
-				// Restoring input fields
-				for(TextField field : uiInputs)
-					field.setDisable(false);
+					// Restoring state
+					state.init();
 
-				// Clearing text values
-				uiTable.infoText.clearText();
-				uiTable.playersCardText.clearText();
+					// Restoring input fields
+					for(TextField field : uiInputs)
+						field.setDisable(false);
 
-				// Restoring buttons
-				uiButtons.get(0).setDisable(true);
-				uiButtons.get(1).setDisable(true);
-				uiButtons.get(2).setDisable(false);
-				uiButtons.get(3).setDisable(true);
-				uiButtons.get(4).setDisable(true);
+					// Restoring buttons
+					uiButtons.get(0).setDisable(true);
+					uiButtons.get(1).setDisable(true);
+					uiButtons.get(2).setDisable(false);
+					uiButtons.get(3).setDisable(true);
+					uiButtons.get(4).setDisable(true);
 
+					// Run onInputChange handlers to properly update Deal Button
+					uiInputs.get(0).textProperty().setValue("lol");
+				});
+				smallDelay.play();
 			})).play();
 		});
 		timeline.play();

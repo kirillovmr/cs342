@@ -16,7 +16,9 @@ public class Player {
     protected int pairPlusBet;
     protected int totalWinnings;
 
+    protected int balance;
     private MyHandler onBetChange = (dummy) -> {};
+    private MyHandler onBalanceChange = (newBalance) -> {};
 
     Player() {
         hand = new ArrayList<>();
@@ -37,17 +39,25 @@ public class Player {
 
     public void setAnteBet(int anteBet) {
         this.anteBet = anteBet;
-        onBetChange.run(0);
+        this.onBetChange.run(0);
+    }
+
+    public int getPlayBet() {
+        return playBet;
     }
 
     public void setPlayBet(int playBet) {
         this.playBet = playBet;
-        onBetChange.run(0);
+        this.onBetChange.run(0);
+    }
+
+    public int getPairPlusBet() {
+        return pairPlusBet;
     }
 
     public void setPairPlusBet(int pairPlusBet) {
         this.pairPlusBet = pairPlusBet;
-        onBetChange.run(0);
+        this.onBetChange.run(0);
     }
 
     public int getTotalWinnings() {
@@ -60,5 +70,18 @@ public class Player {
 
     public void setOnBetChange(MyHandler onBetChange) {
         this.onBetChange = onBetChange;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+        this.onBalanceChange.run(balance);
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setOnBalanceChange(MyHandler onBalanceChange) {
+        this.onBalanceChange = onBalanceChange;
     }
 }

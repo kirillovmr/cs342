@@ -66,7 +66,7 @@ public class UIGameButtons extends HBox {
         // Setting tooltips
         if (text.equals("Play")) {
             Tooltip t = new Tooltip("Doubles the Ante Bet");
-            t.setShowDelay(Duration.ZERO);
+            t.setShowDelay(Duration.millis(100));
             b.setTooltip(t);
         }
 

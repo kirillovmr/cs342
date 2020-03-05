@@ -18,7 +18,7 @@ public class UIChipStack extends VBox {
             chips11.getChildren().add(createChip("chip_black.png", i));
         StackPane chips12 = new StackPane();
         for(int i=0; i<8; i++)
-            chips12.getChildren().add(createChip("chip_black.png", i));
+            chips12.getChildren().add(createChip("chip_red.png", i));
         HBox row1 = new HBox(chips11, UIMisc.leftSpacer(spaceBetweenChipBoxes), chips12);
         row1.getStyleClass().add("chipStackRow");
 
@@ -27,7 +27,7 @@ public class UIChipStack extends VBox {
             chips21.getChildren().add(createChip("chip_black.png", i));
         StackPane chips22 = new StackPane();
         for(int i=0; i<8; i++)
-            chips22.getChildren().add(createChip("chip_black.png", i));
+            chips22.getChildren().add(createChip("chip_red.png", i));
         StackPane chips32 = new StackPane();
         for(int i=0; i<6; i++)
             chips32.getChildren().add(createChip("chip_black.png", i));

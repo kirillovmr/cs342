@@ -9,10 +9,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ThreeCardPokerGame extends Application {
@@ -70,7 +72,7 @@ public class ThreeCardPokerGame extends Application {
 		this.gameFreshStart();
 		this.gameToInitialState();
 
-		rootStack = new StackPane(root, uiSettings);
+		rootStack = new StackPane(root, uiSettings, new UIPlayersImages());
 		uiSettings.setPickOnBounds(false);
 
 		Scene scene = new Scene(rootStack, GameConstants.globalWidth, GameConstants.globalHeight);
@@ -174,7 +176,11 @@ public class ThreeCardPokerGame extends Application {
 	void setEventHandlers() {
 		// Cheat: Flip dealers card on click
 		for(UICard card : uiTable.dealersCards) {
-			card.setOnMouseClicked(e -> card.open(onFinish -> card.close(null) ));
+			card.setOnMouseClicked(e -> {
+				if (!card.showingFace && state.gameStarted) {
+					card.open(onFinish -> card.close(null));
+				}
+			});
 		}
 
 		// Handlers for settings

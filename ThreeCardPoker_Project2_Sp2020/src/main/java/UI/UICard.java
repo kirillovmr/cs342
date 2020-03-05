@@ -16,9 +16,9 @@ import java.util.ArrayList;
 public class UICard extends ImageView {
     Image backImage, frontImage;
 
-    boolean showingFace = false;
-    boolean animating = false;
-    boolean scaled = false;
+    public boolean showingFace = false;
+    private boolean animating = false;
+    private boolean scaled = false;
 
     public UICard(String id) {
         super(UIMisc.createImage(GameConstants.cardBackFilename));

@@ -30,7 +30,29 @@ public class UICard extends ImageView {
         frontImage = null;
     }
 
-    public void flip(EventHandler<ActionEvent> onFinish) {
+    public void open(EventHandler<ActionEvent> onFinish) {
+        if (!showingFace) {
+            this.flip(onFinish);
+        }
+        else {
+            Timeline finish = new Timeline();
+            finish.setOnFinished(onFinish);
+            finish.play();
+        }
+    }
+
+    public void close(EventHandler<ActionEvent> onFinish) {
+        if (showingFace) {
+            this.flip(onFinish);
+        }
+        else {
+            Timeline finish = new Timeline();
+            finish.setOnFinished(onFinish);
+            finish.play();
+        }
+    }
+
+    private void flip(EventHandler<ActionEvent> onFinish) {
         Timeline finishAnim = getFinishAnimation(onFinish);
         if (animating)
             return;

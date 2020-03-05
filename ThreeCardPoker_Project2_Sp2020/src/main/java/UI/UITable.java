@@ -4,10 +4,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class UITable extends StackPane {
 
@@ -24,6 +27,12 @@ public class UITable extends StackPane {
     public UITextRow playersCardText;
     public UITextRow infoText;
 
+    Rectangle tableBack, tableFront;
+    ImagePattern tableBackPattern = new ImagePattern(Objects.requireNonNull(UIMisc.createImage("bg_black.jpg")));
+    ImagePattern tableFrontPattern = new ImagePattern(Objects.requireNonNull(UIMisc.createImage("bg_darkgreen.png")));
+
+    private boolean showingRawStyle = true;
+
     public UITable(ArrayList<ArrayList<UICard>> uiCards, ArrayList<UITextField> uiInputs, ArrayList<ArrayList<ImageView>> uiChips, Text warningText) {
         super();
 
@@ -35,15 +44,31 @@ public class UITable extends StackPane {
         createTable();
     }
 
+    public void flipView() {
+        if (showingRawStyle) {
+//            tableBack.setFill(tableBackPattern);
+            tableBack.setFill(Paint.valueOf("#202125"));
+            tableFront.setFill(tableFrontPattern);
+        }
+        else {
+            tableBack.setFill(Paint.valueOf(GameConstants.tableBackFill));
+            tableFront.setFill(Paint.valueOf(GameConstants.tableFrontFill));
+        }
+
+        showingRawStyle = !showingRawStyle;
+    }
+
     public void createTable() {
         // Back side of the table
-        Rectangle tableBack = new Rectangle(0, 0, tableWidth, tableHeight);
+        tableBack = new Rectangle(0, 0, tableWidth, tableHeight);
+        tableBack.getStyleClass().addAll("tableShadow");
         tableBack.setId("table-back");
         tableBack.setArcWidth(tableWidth * 0.5);
         tableBack.setArcHeight(tableHeight);
 
         // Front side of the table
-        Rectangle tableFront = new Rectangle(0, 0, tableWidth * 0.9, tableHeight * 0.9);
+        tableFront = new Rectangle(0, 0, tableWidth * 0.9, tableHeight * 0.9);
+        tableFront.getStyleClass().addAll("tableShadow");
         tableFront.setId("table-front");
         tableFront.getStyleClass().addAll("shadow");
         tableFront.setArcWidth(tableWidth * 0.9 * 0.5);

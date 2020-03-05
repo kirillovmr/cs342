@@ -32,6 +32,7 @@ public class ThreeCardPokerGame extends Application {
 
 	UITable uiTable;
 	UIGameButtons gameButtons;
+	UISettings uiSettings;
 
 	Timeline showWarningText;
 	Text warningText;
@@ -72,9 +73,11 @@ public class ThreeCardPokerGame extends Application {
 		// Creating elements
 		uiTable = new UITable(uiCards, uiInputs, uiChips, warningText);
 		gameButtons = new UIGameButtons(uiButtons);
+		uiSettings = new UISettings(stage);
 
 		// Main Vertical Box
 		VBox root = new VBox(
+				uiSettings,
 				new UIDealer(),
 				uiTable,
 				UIMisc.spacer(30),
@@ -87,13 +90,9 @@ public class ThreeCardPokerGame extends Application {
 		this.setEventHandlers();
 
 		// Preparing game to start
+		this.gameFreshStart();
 		this.gameToInitialState();
 
-		// Setting up players
-		playerOne.setBalance(GameConstants.initialMoneyValue);
-		playerTwo.setBalance(GameConstants.initialMoneyValue);
-		playerOne.setAnteBet(GameConstants.minBet);
-		playerTwo.setAnteBet(GameConstants.minBet);
 
 		rootStack = new StackPane(root);
 
@@ -106,13 +105,24 @@ public class ThreeCardPokerGame extends Application {
 		stage.show();
 	}
 
+	void makeDealBtnFromStart() {
+		uiButtons.get(2).setDisable(true);
+		uiButtons.get(2).setText(GameConstants.dealBtnText);
+		uiButtons.get(2).setOnAction(dealBtnHandler);
+		state.showingDealButton = true;
+	}
+
+	void makeStartBtnFromDeal() {
+		uiButtons.get(2).setOnAction(startBtnHandler);
+		uiButtons.get(2).setText(GameConstants.startBtnText);
+		uiButtons.get(2).setDisable(false);
+		state.showingDealButton = false;
+	}
 
 	void createEventHandlers() {
 		// Handler for start button
 		startBtnHandler = event -> {
-			uiButtons.get(2).setDisable(true);
-			uiButtons.get(2).setText(GameConstants.dealBtnText);
-			uiButtons.get(2).setOnAction(dealBtnHandler);
+			makeDealBtnFromStart();
 			gameToInitialState();
 		};
 
@@ -144,8 +154,8 @@ public class ThreeCardPokerGame extends Application {
 			// Animating chips
 			animateTranslationOfChips(onFinish -> {
 				// Showing cards to players
-				uiCards.get(1).get(0).flip(e1 -> uiCards.get(1).get(1).flip(e2 -> uiCards.get(1).get(2).flip(e3 -> {
-					uiCards.get(2).get(0).flip(e4 -> uiCards.get(2).get(1).flip(e5 -> uiCards.get(2).get(2).flip(onFinish2 -> {
+				uiCards.get(1).get(0).open(e1 -> uiCards.get(1).get(1).open(e2 -> uiCards.get(1).get(2).open(e3 -> {
+					uiCards.get(2).get(0).open(e4 -> uiCards.get(2).get(1).open(e5 -> uiCards.get(2).get(2).open(onFinish2 -> {
 						// Enabling Start and Fold buttons
 						uiButtons.get(0).setDisable(false);
 						uiButtons.get(1).setDisable(false);
@@ -202,8 +212,23 @@ public class ThreeCardPokerGame extends Application {
 	void setEventHandlers() {
 		// Cheat: Flip dealers card on click
 		for(UICard card : uiCards.get(0)) {
-			card.setOnMouseClicked(e -> card.flip(onFinish -> card.flip(null) ));
+			card.setOnMouseClicked(e -> card.open(onFinish -> card.close(null) ));
 		}
+
+		// Handlers for settings
+		uiSettings.freshStartBtn.setOnAction(e -> {
+			uiSettings.hidePopup();
+			gameToInitialState();
+			gameFreshStart();
+		});
+		uiSettings.newLookBtn.setOnAction(e -> {
+			uiSettings.hidePopup();
+			uiTable.flipView();
+		});
+		uiSettings.exitBtn.setOnAction(e -> {
+			uiSettings.hidePopup();
+			System.exit(0);
+		});
 
 		// Handlers for input fields
 		uiInputs.get(0).setOnSuccessChange( newValue -> {
@@ -317,16 +342,14 @@ public class ThreeCardPokerGame extends Application {
 			Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(1000)));
 			smallDelay.setOnFinished(afterDelay -> {
 				// Open dealer cards
-				uiCards.get(0).get(0).flip(e -> uiCards.get(0).get(1).flip(e2 -> uiCards.get(0).get(2).flip(onFinish -> {
+				uiCards.get(0).get(0).open(e -> uiCards.get(0).get(1).open(e2 -> uiCards.get(0).get(2).open(onFinish -> {
 					// Calculate winner
 					evaluateHands();
 
 					state.gameStarted = false;
 
 					// Making deal btn as start btn
-					uiButtons.get(2).setOnAction(startBtnHandler);
-					uiButtons.get(2).setText(GameConstants.startBtnText);
-					uiButtons.get(2).setDisable(false);
+					makeStartBtnFromDeal();
 				})));
 			});
 			smallDelay.play();
@@ -606,7 +629,7 @@ public class ThreeCardPokerGame extends Application {
 				// Closing cards
 				for(ArrayList<UICard> arr : uiCards)
 					for (UICard card : arr)
-						card.flip(null);
+						card.close(null);
 
 				// Delay to make sure cards are closed
 				Timeline smallDelay = new Timeline(new KeyFrame(Duration.millis(GameConstants.cardFlipAnimationTime * 2)));
@@ -647,4 +670,19 @@ public class ThreeCardPokerGame extends Application {
 		} catch (Exception ignored) {}
 	}
 
+
+	void gameFreshStart() {
+		playerOne.setBalance(GameConstants.initialMoneyValue);
+		playerTwo.setBalance(GameConstants.initialMoneyValue);
+
+		playerOne.setPairPlusBet(0);
+		playerTwo.setPairPlusBet(0);
+
+		playerOne.setAnteBet(GameConstants.minBet);
+		playerTwo.setAnteBet(GameConstants.minBet);
+
+		if (!state.showingDealButton) {
+			makeDealBtnFromStart();
+		}
+	}
 }

@@ -7,6 +7,31 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 0);
 }
 
+
+/*
+    Settings
+*/
+.settingsRow {
+    -fx-alignment: top-right;
+    -fx-padding: 20 20 0 0;
+}
+.settingsBtn {
+    -fx-min-width: 100;
+    -fx-pref-width: 100;
+}
+.settingsMainBtn {
+
+}
+
+.popupBox {
+    -fx-spacing: 10;
+}
+
+
+/*
+
+ */
+
 .showBorder {
     -fx-border-color: red;
     -fx-border-width: 1;
@@ -25,16 +50,16 @@
     -fx-alignment: top-center;
 }
 
+.tableShadow {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.99), 5, 0, 0, 0);
+}
 #table-back {
     -fx-fill: rgb(104, 108, 120);
-    -fx-background-color: rgb(104, 108, 120);
-    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
 }
 
 #table-front {
     -fx-border-color: rgb(75, 78, 88);
     -fx-fill: rgb(87, 90, 102);
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 30, 0, 0, 0);
 }
 
 .dealerImage {
@@ -66,7 +91,7 @@
     -fx-alignment: baseline-center;
 }
 .wagerRowText {
-    -fx-fill: rgb(39, 39, 39);
+    -fx-fill: rgb(19, 19, 19);
     -fx-font-family: "Courier";
     -fx-font-size: 22;
 }

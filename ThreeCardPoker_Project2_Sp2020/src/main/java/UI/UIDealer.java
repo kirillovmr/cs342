@@ -22,7 +22,7 @@ public class UIDealer extends StackPane {
         StackPane smokeStack = new StackPane(smoke);
         smokeStack.setPadding(new Insets(0,38,0,0));
         VBox box = new VBox(
-                UIMisc.spacer(30), // Top padding before dealer
+//                UIMisc.spacer(30), // Top padding before dealer
                 smokeStack,
                 UIMisc.spacer(76) // Aligning smoke
         );

@@ -16,6 +16,8 @@ public class State {
     public boolean player1ChosenPlay;
     public boolean player2ChosenPlay;
 
+    public boolean showingDealButton;
+
     public State() {
         init();
     }
@@ -29,5 +31,7 @@ public class State {
         player2UIUpdated = false;
         player1ChosenPlay = false;
         player2ChosenPlay = false;
+
+        showingDealButton = true;
     }
 }

@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -125,6 +126,7 @@ public class UICard extends ImageView {
         }
 
         cardBox.getStyleClass().add("cardBox");
+
         return cardBox;
     }
 }

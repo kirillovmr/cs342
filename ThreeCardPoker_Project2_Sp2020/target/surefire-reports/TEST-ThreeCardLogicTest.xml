@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="ThreeCardLogicTest" time="0.014" tests="12" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="ThreeCardLogicTest" time="0.055" tests="15" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="13"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-13.0.1.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/viktorkirillov/Documents/GitHub/cs342/ThreeCardPoker_Project2_Sp2020/target/surefire/surefirebooter7319435517094233451.jar /Users/viktorkirillov/Documents/GitHub/cs342/ThreeCardPoker_Project2_Sp2020/target/surefire 2020-02-24T16-25-51_515-jvmRun1 surefire7161872005823497460tmp surefire_04457481193639795389tmp"/>
+    <property name="sun.java.command" value="/Users/viktorkirillov/Documents/GitHub/cs342/ThreeCardPoker_Project2_Sp2020/target/surefire/surefirebooter8769952125041105518.jar /Users/viktorkirillov/Documents/GitHub/cs342/ThreeCardPoker_Project2_Sp2020/target/surefire 2020-03-08T16-04-43_024-jvmRun1 surefire3545876538141190075tmp surefire_017017911099749837747tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/viktorkirillov/Documents/GitHub/cs342/ThreeCardPoker_Project2_Sp2020/target/test-classes:/Users/viktorkirillov/Documents/GitHub/cs342/ThreeCardPoker_Project2_Sp2020/target/classes:/Users/viktorkirillov/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.4.2/junit-jupiter-api-5.4.2.jar:/Users/viktorkirillov/.m2/repository/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar:/Users/viktorkirillov/.m2/repository/org/opentest4j/opentest4j/1.1.1/opentest4j-1.1.1.jar:/Users/viktorkirillov/.m2/repository/org/junit/platform/junit-platform-commons/1.4.2/junit-platform-commons-1.4.2.jar:/Users/viktorkirillov/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.4.2/junit-jupiter-engine-5.4.2.jar:/Users/viktorkirillov/.m2/repository/org/junit/platform/junit-platform-engine/1.4.2/junit-platform-engine-1.4.2.jar:/Users/viktorkirillov/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.4.2/junit-jupiter-params-5.4.2.jar:/Users/viktorkirillov/.m2/repository/org/openjfx/javafx-controls/12.0.1/javafx-controls-12.0.1.jar:/Users/viktorkirillov/.m2/repository/org/openjfx/javafx-controls/12.0.1/javafx-controls-12.0.1-mac.jar:/Users/viktorkirillov/.m2/repository/org/openjfx/javafx-graphics/12.0.1/javafx-graphics-12.0.1.jar:/Users/viktorkirillov/.m2/repository/org/openjfx/javafx-graphics/12.0.1/javafx-graphics-12.0.1-mac.jar:/Users/viktorkirillov/.m2/repository/org/openjfx/javafx-base/12.0.1/javafx-base-12.0.1.jar:/Users/viktorkirillov/.m2/repository/org/openjfx/javafx-base/12.0.1/javafx-base-12.0.1-mac.jar:/Users/viktorkirillov/.m2/repository/org/openjfx/javafx-fxml/12/javafx-fxml-12.jar:/Users/viktorkirillov/.m2/repository/org/openjfx/javafx-fxml/12/javafx-fxml-12-mac.jar:/Users/viktorkirillov/.m2/repository/org/jetbrains/annotations/18.0.0/annotations-18.0.0.jar:"/>
@@ -28,7 +28,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/Users/viktorkirillov/Documents/GitHub/cs342/ThreeCardPoker_Project2_Sp2020/target/surefire/surefirebooter7319435517094233451.jar"/>
+    <property name="surefire.real.class.path" value="/Users/viktorkirillov/Documents/GitHub/cs342/ThreeCardPoker_Project2_Sp2020/target/surefire/surefirebooter8769952125041105518.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="13.0.1+9"/>
@@ -53,16 +53,19 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="57.0"/>
   </properties>
-  <testcase name="notStraight" classname="ThreeCardLogicTest" time="0"/>
-  <testcase name="notStraightFlush" classname="ThreeCardLogicTest" time="0"/>
-  <testcase name="high" classname="ThreeCardLogicTest" time="0.001"/>
-  <testcase name="pair" classname="ThreeCardLogicTest" time="0"/>
-  <testcase name="flush" classname="ThreeCardLogicTest" time="0"/>
-  <testcase name="evalHand" classname="ThreeCardLogicTest" time="0"/>
-  <testcase name="threeOfKind" classname="ThreeCardLogicTest" time="0.001"/>
+  <testcase name="notStraight" classname="ThreeCardLogicTest" time="0.007"/>
+  <testcase name="notStraightFlush" classname="ThreeCardLogicTest" time="0.005"/>
+  <testcase name="compareHand" classname="ThreeCardLogicTest" time="0.001"/>
+  <testcase name="high" classname="ThreeCardLogicTest" time="0.002"/>
+  <testcase name="pair" classname="ThreeCardLogicTest" time="0.002"/>
+  <testcase name="compareHands" classname="ThreeCardLogicTest" time="0.001"/>
+  <testcase name="flush" classname="ThreeCardLogicTest" time="0.001"/>
+  <testcase name="evalHand" classname="ThreeCardLogicTest" time="0.001"/>
+  <testcase name="threeOfKind" classname="ThreeCardLogicTest" time="0"/>
+  <testcase name="evalPPWinnings" classname="ThreeCardLogicTest" time="0"/>
   <testcase name="notFlush" classname="ThreeCardLogicTest" time="0.001"/>
-  <testcase name="straightFlush" classname="ThreeCardLogicTest" time="0.001"/>
-  <testcase name="straight" classname="ThreeCardLogicTest" time="0"/>
-  <testcase name="notThreeOfKind" classname="ThreeCardLogicTest" time="0.003"/>
+  <testcase name="straightFlush" classname="ThreeCardLogicTest" time="0.002"/>
+  <testcase name="straight" classname="ThreeCardLogicTest" time="0.002"/>
+  <testcase name="notThreeOfKind" classname="ThreeCardLogicTest" time="0.002"/>
   <testcase name="notPair" classname="ThreeCardLogicTest" time="0.002"/>
 </testsuite>

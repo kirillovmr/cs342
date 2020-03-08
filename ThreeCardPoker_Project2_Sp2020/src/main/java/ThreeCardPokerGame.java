@@ -9,12 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ThreeCardPokerGame extends Application {
@@ -51,8 +49,6 @@ public class ThreeCardPokerGame extends Application {
 		playerOne = new Player();
 		playerTwo = new Player();
 		theDealer = new Dealer();
-
-		// TODO: When player gets FLUSH but dealer pair, some why player loses
 
 		// Creating elements
 		uiSettings = new UISettings(stage);
@@ -341,13 +337,16 @@ public class ThreeCardPokerGame extends Application {
 		int time = 100;
 
 		int p1Res = ThreeCardLogic.evalHand(playerOne.getHand());
+		int p1High = ThreeCardLogic.highCard(playerOne.getHand());
 		int p1Win = ThreeCardLogic.evalPPWinnings(playerOne.getHand(), playerOne.pairPlusBet);
+
 		int p2Res = ThreeCardLogic.evalHand(playerTwo.getHand());
+		int p2High = ThreeCardLogic.highCard(playerTwo.getHand());
 		int p2Win = ThreeCardLogic.evalPPWinnings(playerTwo.getHand(), playerTwo.pairPlusBet);
 
 		// Setting card text value
-		uiTable.playersCardText.setPlayerOneText( ThreeCardLogic.evalHandToPairPlusName(p1Res) );
-		uiTable.playersCardText.setPlayerTwoText( ThreeCardLogic.evalHandToPairPlusName(p2Res) );
+		uiTable.playersCardText.setPlayerOneText( p1Res != 0 ? ThreeCardLogic.evalHandToPairPlusName(p1Res) : ThreeCardLogic.cardToName(p1High) + "-High" );
+		uiTable.playersCardText.setPlayerTwoText( p2Res != 0 ? ThreeCardLogic.evalHandToPairPlusName(p2Res) : ThreeCardLogic.cardToName(p2High) + "-High" );
 
 		AtomicReference<String> p1InfoText = new AtomicReference<>();
 		AtomicReference<String> p2InfoText = new AtomicReference<>();
@@ -390,35 +389,53 @@ public class ThreeCardPokerGame extends Application {
 	// Evaluates players against the dealer and runs animation
 	void evaluateHands() {
 		String p1InfoText, p2InfoText;
+
 		int anteToPlayerX = 50, anteToDealerX = 0;
 		int anteToPlayerY = 10, anteToDealerY = 100;
 		int time = 100;
 
+		// Check for dealer doesn't qualify
+		if (ThreeCardLogic.evalHand(theDealer.getHand()) == 0 && ThreeCardLogic.highCard(theDealer.getHand()) < 12) {
+			uiTable.infoText.setPlayerOneText("Dealer doesn't qualify");
+			uiTable.infoText.setPlayerTwoText("Dealer doesn't qualify");
+
+			playerOne.setBalance( playerOne.getBalance() + 2 * playerOne.getAnteBet() );
+			playerTwo.setBalance( playerTwo.getBalance() + 2 * playerTwo.getAnteBet() );
+
+			UIMisc.shiftChips(chipsCopy.get(2), -anteToPlayerX, anteToPlayerY, time, null);
+			UIMisc.shiftChips(chipsCopy.get(3), anteToPlayerX, anteToPlayerY, time, null);
+			return;
+		}
+
 		if (state.player1ChosenPlay) {
-			int res1 = ThreeCardLogic.compareHands(theDealer.getHand(), playerOne.getHand());
-			if (res1 == 1) {
-				p1InfoText = "You lost ante wager";
+			int compareHandsResult = ThreeCardLogic.compareHands(theDealer.getHand(), playerOne.getHand());
+			if ( compareHandsResult == 1) {
+				p1InfoText = "Dealer wins";
 				UIMisc.shiftChips(chipsCopy.get(2), anteToDealerX, -anteToDealerY, time, null);
-			} else if (res1 == 2) {
+			}
+			else if (compareHandsResult == 2) {
 				p1InfoText = "You won $" + 4 * playerOne.getAnteBet();
 				playerOne.setBalance( playerOne.getBalance() + 4 * playerOne.getAnteBet() );
 				UIMisc.duplicateChips(chipsCopy.get(2), 1, "chip_red.png");
 				UIMisc.shiftChips(chipsCopy.get(2), -anteToPlayerX, anteToPlayerY, time, null);
-			} else {
+			}
+			else {
 				p1InfoText = "Neither wins";
 				playerOne.setBalance( playerOne.getBalance() + 2 * playerOne.getAnteBet() );
 				UIMisc.shiftChips(chipsCopy.get(2), -anteToPlayerX, anteToPlayerY, time, null);
 			}
-		} else {
+		}
+		else {
 			p1InfoText = "You lose because of the Fold";
 			UIMisc.shiftChips(chipsCopy.get(2), anteToDealerX, -anteToDealerY, time, null);
 		}
 		uiTable.infoText.setPlayerOneText(p1InfoText);
 
+
 		if (state.player2ChosenPlay) {
 			int res2 = ThreeCardLogic.compareHands(theDealer.getHand(), playerTwo.getHand());
 			if (res2 == 1) {
-				p2InfoText = "You lost ante wager";
+				p2InfoText = "Dealer wins";
 				UIMisc.shiftChips(chipsCopy.get(3), anteToDealerX, -anteToDealerY, time, null);
 			} else if (res2 == 2) {
 				p2InfoText = "You won $" + 4 * playerTwo.getAnteBet();

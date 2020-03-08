@@ -58,15 +58,8 @@ public class UITable extends StackPane {
 
     // Flips the view of the table
     public void flipView() {
-        if (showingRawStyle) {
-            tableBack.setFill(Paint.valueOf("#202125"));
-            tableFront.setFill(tableFrontPattern);
-        }
-        else {
-            tableBack.setFill(Paint.valueOf(GameConstants.tableBackFill));
-            tableFront.setFill(Paint.valueOf(GameConstants.tableFrontFill));
-        }
-
+        tableBack.setFill(showingRawStyle ? Paint.valueOf("#202125") : Paint.valueOf(GameConstants.tableBackFill));
+        tableFront.setFill(showingRawStyle ? tableFrontPattern : Paint.valueOf(GameConstants.tableFrontFill));
         showingRawStyle = !showingRawStyle;
     }
 
@@ -88,12 +81,12 @@ public class UITable extends StackPane {
 
         // Dealers Cards
         HBox dealerCardsBox = UICard.createCardBox(dealersCards, "dealerCard");
-        dealerCardsBox.getStyleClass().add("dealerCardsBox");
+        dealerCardsBox.getStyleClass().addAll("dealerCardsBox");
 
         // Chip stacks
-        UIChipStack letfChips = new UIChipStack();
-        letfChips.getStyleClass().add("mainChipStack");
-        VBox leftChipsBox = new VBox(UIMisc.spacer(50), letfChips);
+        UIChipStack leftChips = new UIChipStack();
+        leftChips.getStyleClass().add("mainChipStack");
+        VBox leftChipsBox = new VBox(UIMisc.spacer(50), leftChips);
         UIChipStack rightChips = new UIChipStack();
         rightChips.setVisible(false);
 
@@ -103,7 +96,7 @@ public class UITable extends StackPane {
 
         // Dealers Row
         HBox dealerRow = new HBox(leftChipsBox, dealerCardsBox, rightChips);
-        dealerRow.getStyleClass().add("dealerRow");
+        dealerRow.getStyleClass().addAll("dealerRow");
 
         // Pair Plus Row
         HBox pairPlusRow = createWagerRow("", "PAIR PLUS", "chip_black.png", uiChips.get(0), uiChips.get(1));

@@ -32,13 +32,13 @@ public class DeckTest {
         for (int i=0; i<52; i++)
             d.draw();
 
-        assertEquals(null, d.draw(), "Returned not null when deck is supposed to be empty");
+        assertNull(d.draw(), "Returned not null when deck is supposed to be empty");
     }
 
     @Test
     @DisplayName("newDeck reinitialization")
     void test4() {
-        Card a[] = { d.get(0), d.get(1), d.get(2) };
+        Card[] a = { d.get(0), d.get(1), d.get(2) };
         d.newDeck();
         for (int i=0; i<a.length; i++) {
             assertFalse(d.get(0) == a[0] && d.get(1) == a[1] && d.get(2) == a[2], "Deck was not reshuffled properly");

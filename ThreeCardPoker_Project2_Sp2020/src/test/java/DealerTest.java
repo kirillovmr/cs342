@@ -30,7 +30,7 @@ public class DealerTest {
         assertEquals(3, cards.size(), "Dealer returned not 3 cards");
 
         for(int i=0; i<cards.size(); i++) {
-            assertEquals(cards.get(i), d.dealersHand.get(i), "Drawed cards are not same as dealers hand");
+            assertEquals(cards.get(i), d.dealersHand.get(i), "Draw cards are not same as dealers hand");
         }
     }
 

@@ -64,11 +64,11 @@ public class UIGameButtons extends HBox {
         b.setId(id);
 
         // Setting tooltips
-        if (text.equals("Play")) {
-            Tooltip t = new Tooltip("Doubles the Ante Bet");
-            t.setShowDelay(Duration.millis(100));
-            b.setTooltip(t);
-        }
+//        if (text.equals("Play")) {
+//            Tooltip t = new Tooltip("Doubles the Ante Bet");
+//            t.setShowDelay(Duration.millis(100));
+//            b.setTooltip(t);
+//        }
 
         return b;
     }

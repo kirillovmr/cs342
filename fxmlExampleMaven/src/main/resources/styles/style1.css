@@ -1,0 +1,36 @@
+#root{
+	-fx-background-color: #F6F5F1;
+}
+#coffeeImage {
+	-fx-alignment: center;
+}
+#textBox {
+	-fx-padding: 20 0 20 0;
+}
+#toppingsTextBox, #toppingsCol1 {
+	-fx-padding: 0 0 0 10;
+}
+#toppingsBox {
+	-fx-padding: 10 0 0 0;
+}
+#orderTextBox {
+	-fx-padding: 20 0 0 10;
+}
+#orderBox {
+	-fx-padding: 10 0 0 10;
+}
+#totalTextBox {
+	-fx-padding: 10 0 10 0;
+}
+#createOrderButton {
+	-fx-background-color: #B79F8F;
+}
+#clearOrderButton {
+	-fx-background-color: #A66059;
+}
+#buttonsBox {
+	-fx-padding: 0 0 10 0;
+}
+
+
+

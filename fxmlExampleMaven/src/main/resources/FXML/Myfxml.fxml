@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Button?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="root" fx:controller="application.MyController">
+	<top>
+		<VBox>
+			<ImageView fitHeight="150" fitWidth="400" id="coffeeImage" fx:id="coffeeImage"/>
+
+			<VBox alignment="CENTER" spacing="20" id="textBox">
+				<Text textAlignment="CENTER">Basic Coffee</Text>
+				<VBox spacing="5" alignment="TOP_CENTER">
+					<Text textAlignment="CENTER">Coffee is a brewed drink prepared from roasted coffee beans,</Text>
+					<Text textAlignment="CENTER">the seeds of berries from certain Coffea species.</Text>
+				</VBox>
+			</VBox>
+
+			<HBox id="toppingsTextBox">
+				<Text>Select extras:</Text>
+			</HBox>
+
+			<HBox id="toppingsBox">
+				<VBox id="toppingsCol1" spacing="10" prefWidth="200">
+					<HBox alignment="CENTER_LEFT" spacing="5">
+						<ImageView fx:id="extraShotImage" fitWidth="22" fitHeight="22"/>
+						<CheckBox fx:id="extraShotCheck">Extra Shot</CheckBox>
+					</HBox>
+					<HBox alignment="CENTER_LEFT" spacing="5">
+						<ImageView fx:id="creamImage" fitWidth="22" fitHeight="22"/>
+						<CheckBox fx:id="creamCheck">Cream</CheckBox>
+					</HBox>
+					<HBox alignment="CENTER_LEFT" spacing="5">
+						<ImageView fx:id="milkImage" fitWidth="22" fitHeight="22"/>
+						<CheckBox fx:id="milkCheck">Milk</CheckBox>
+					</HBox>
+				</VBox>
+				<VBox id="toppingsBox" spacing="10">
+					<HBox alignment="CENTER_LEFT" spacing="5">
+						<ImageView fx:id="sugarImage" fitWidth="22" fitHeight="22"/>
+						<CheckBox fx:id="sugarCheck">Sugar</CheckBox>
+					</HBox>
+					<HBox alignment="CENTER_LEFT" spacing="5">
+						<ImageView fx:id="honeyImage" fitWidth="22" fitHeight="22"/>
+						<CheckBox fx:id="honeyCheck">Honey</CheckBox>
+					</HBox>
+					<HBox alignment="CENTER_LEFT" spacing="5">
+						<ImageView fx:id="iceImage" fitWidth="22" fitHeight="22"/>
+						<CheckBox fx:id="iceCheck">Ice</CheckBox>
+					</HBox>
+				</VBox>
+			</HBox>
+
+			<HBox id="orderTextBox">
+				<Text>Order summary:</Text>
+			</HBox>
+
+			<VBox id="orderBox" spacing="5" fx:id="orderBox">
+				<Text> * will be available after placing an order</Text>
+			</VBox>
+		</VBox>
+	</top>
+	<bottom>
+		<VBox id="buttonsBox" spacing="5" alignment="BOTTOM_CENTER">
+			<HBox alignment="CENTER" id="totalTextBox">
+				<Text visible="false" fx:id="totalText">Total: $0.00</Text>
+			</HBox>
+			<Button id="createOrderButton" prefWidth="380" onAction="#placeOrder" fx:id="createOrderButton">Place order !</Button>
+			<Button id="clearOrderButton" prefWidth="380" onAction="#clearOrder" fx:id="clearOrderButton">Clear</Button>
+		</VBox>
+	</bottom>
+	
+</BorderPane>
+
